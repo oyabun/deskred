@@ -35,7 +35,9 @@ function TabContainer({ toolContent, containerId, containerStatus }) {
             // Parse logs and categorize lines
             const parsedLogs = data.logs.split('\n').filter(line => line.trim()).map((line, idx) => {
               // Remove timestamp prefix if present
-              const cleanLine = line.replace(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z\s+/, '');
+              let cleanLine = line.replace(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z\s+/, '');
+              // Remove ANSI color codes (e.g., \x1b[31m, \x1b[0m, [0m, etc.)
+              cleanLine = cleanLine.replace(/\x1b\[[0-9;]*m/g, '').replace(/\[[0-9;]*m/g, '');
               return {
                 id: idx,
                 text: cleanLine,
@@ -122,9 +124,11 @@ function TabContainer({ toolContent, containerId, containerStatus }) {
       // Extract URLs or key findings
       const urlMatch = log.text.match(/https?:\/\/[^\s]+/);
       if (urlMatch) {
+        // Strip ANSI color codes from URL (e.g., [0m, [31m, etc.)
+        const cleanUrl = urlMatch[0].replace(/\x1b\[[0-9;]*m/g, '').replace(/\[0m/g, '');
         results.push({
           type: 'url',
-          value: urlMatch[0],
+          value: cleanUrl,
           line: log.text
         });
       }
