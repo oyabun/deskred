@@ -11,12 +11,24 @@ class ReportParser:
     """Parse and aggregate OSINT tool results into a clean report"""
 
     @staticmethod
+    def strip_ansi_codes(text: str) -> str:
+        """Remove ANSI color codes and escape sequences from text"""
+        if not text:
+            return text
+        # Pattern to match ANSI escape sequences
+        ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+        return ansi_escape.sub('', text)
+
+    @staticmethod
     def parse_maigret(logs: str) -> Dict:
         """Extract found profiles from Maigret output"""
         results = []
 
         if not logs:
             return {"tool": "Maigret", "found": 0, "profiles": []}
+
+        # Strip ANSI codes first
+        logs = ReportParser.strip_ansi_codes(logs)
 
         # Pattern for found profiles: [+] SiteName: URL
         pattern = r'\[\+\]\s+([^:]+):\s+(https?://[^\s]+)'
@@ -57,6 +69,9 @@ class ReportParser:
         if not logs:
             return {"tool": "Sherlock", "found": 0, "profiles": []}
 
+        # Strip ANSI codes first
+        logs = ReportParser.strip_ansi_codes(logs)
+
         # Pattern for found profiles: [+] SiteName: URL
         pattern = r'\[\+\]\s+([^:]+):\s+(https?://[^\s]+)'
         matches = re.finditer(pattern, logs)
@@ -80,6 +95,9 @@ class ReportParser:
 
         if not logs:
             return {"tool": "Social Analyzer", "found": 0, "profiles": []}
+
+        # Strip ANSI codes first
+        logs = ReportParser.strip_ansi_codes(logs)
 
         # Social Analyzer output is complex, look for URLs
         # Pattern for URLs in output
@@ -111,6 +129,9 @@ class ReportParser:
         if not logs:
             return {"tool": "Digital Footprint", "found": 0, "profiles": []}
 
+        # Strip ANSI codes first
+        logs = ReportParser.strip_ansi_codes(logs)
+
         # Look for "Found:" or success indicators
         pattern = r'(?:Found|✓|SUCCESS).*?(https?://[^\s]+)'
         matches = re.finditer(pattern, logs, re.IGNORECASE)
@@ -138,6 +159,9 @@ class ReportParser:
 
         if not logs:
             return {"tool": "GoSearch", "found": 0, "profiles": []}
+
+        # Strip ANSI codes first
+        logs = ReportParser.strip_ansi_codes(logs)
 
         # GoSearch typically shows [+] or ✓ for found profiles
         pattern = r'[\[+\]|✓]\s*([^:]+):\s*(https?://[^\s]+)'
