@@ -9,6 +9,7 @@ import SherlockTool from './components/tools/SherlockTool';
 import HoleheTool from './components/tools/HoleheTool';
 import GenericTool from './components/tools/GenericTool';
 import AccountHunterTool from './components/tools/AccountHunterTool';
+import NexusTool from './components/tools/NexusTool';
 
 function App() {
   const [windows, setWindows] = useState([]);
@@ -195,6 +196,8 @@ function App() {
         />;
       case 'account-hunter':
         return <AccountHunterTool />;
+      case 'nexus':
+        return <NexusTool />;
       default:
         return <div>Tool not configured</div>;
     }

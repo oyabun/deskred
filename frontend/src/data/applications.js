@@ -75,7 +75,6 @@ export const applications = [
     name: 'Nexus',
     icon: 'Database',
     description: 'Browse, search, and export cached OSINT reports',
-    endpoint: 'http://localhost:8080',
-    external: true,
+    endpoint: '/api/nexus',
   },
 ];
