@@ -1,0 +1,66 @@
+// OSINT Application configurations
+export const applications = [
+  {
+    id: 'maigret',
+    name: 'Maigret',
+    icon: 'Search',
+    description: 'Username OSINT analysis across 3000+ sites',
+    endpoint: '/api/maigret',
+  },
+  {
+    id: 'sherlock',
+    name: 'Sherlock',
+    icon: 'UserSearch',
+    description: 'Hunt down social media accounts by username',
+    endpoint: '/api/sherlock',
+  },
+  {
+    id: 'holehe',
+    name: 'Holehe',
+    icon: 'Mail',
+    description: 'Check email accounts registered on different websites',
+    endpoint: '/api/holehe',
+  },
+  {
+    id: 'harvester',
+    name: 'TheHarvester',
+    icon: 'Globe',
+    description: 'Gather emails, subdomains, IPs, and more',
+    endpoint: '/api/harvester',
+  },
+  {
+    id: 'recon-ng',
+    name: 'Recon-ng',
+    icon: 'Radar',
+    description: 'Full-featured reconnaissance framework',
+    endpoint: '/api/recon-ng',
+  },
+  {
+    id: 'social-analyzer',
+    name: 'Social Analyzer',
+    icon: 'Users',
+    description: 'Analyze and find profiles across social networks',
+    endpoint: '/api/social-analyzer',
+  },
+  {
+    id: 'spiderfoot',
+    name: 'SpiderFoot',
+    icon: 'Bug',
+    description: 'Automated OSINT collection tool',
+    endpoint: '/api/spiderfoot',
+  },
+  {
+    id: 'digitalfootprint',
+    name: 'Digital Footprint',
+    icon: 'Footprints',
+    description: 'Track digital footprints across 18+ platforms',
+    endpoint: '/api/digitalfootprint',
+  },
+  {
+    id: 'gosearch',
+    name: 'GoSearch',
+    icon: 'Zap',
+    description: 'Fast username search across 300+ sites with breach data',
+    endpoint: '/api/gosearch',
+  },
+];

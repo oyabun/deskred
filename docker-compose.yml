@@ -1,0 +1,205 @@
+version: '3.8'
+
+services:
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: osint-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+      - osint-results:/app/results
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    networks:
+      - osint-network
+    restart: unless-stopped
+    depends_on:
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Redis for caching and task queue
+  redis:
+    image: redis:7-alpine
+    container_name: osint-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - osint-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # Frontend - Retro terminal-style OSINT interface
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: osint-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    networks:
+      - osint-network
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+  # OSINT Tool Images - These are built but not run as services
+  # They are executed on-demand by the backend via Docker API
+
+  maigret:
+    build:
+      context: ./docker/maigret
+      dockerfile: Dockerfile
+    image: deskred-maigret
+    profiles:
+      - tools
+    networks:
+      - osint-network
+    volumes:
+      - maigret_results:/app/results
+
+  sherlock:
+    build:
+      context: ./docker/sherlock
+      dockerfile: Dockerfile
+    image: deskred-sherlock
+    profiles:
+      - tools
+    networks:
+      - osint-network
+    volumes:
+      - sherlock_results:/app/results
+
+  holehe:
+    build:
+      context: ./docker/holehe
+      dockerfile: Dockerfile
+    image: deskred-holehe
+    profiles:
+      - tools
+    networks:
+      - osint-network
+    volumes:
+      - holehe_results:/app/results
+
+  theharvester:
+    build:
+      context: ./docker/theharvester
+      dockerfile: Dockerfile
+    image: deskred-theharvester
+    profiles:
+      - tools
+    networks:
+      - osint-network
+    volumes:
+      - harvester_results:/app/results
+
+  recon-ng:
+    build:
+      context: ./docker/recon-ng
+      dockerfile: Dockerfile
+    image: deskred-recon-ng
+    profiles:
+      - tools
+    networks:
+      - osint-network
+    volumes:
+      - recon_ng_results:/app/results
+
+  social-analyzer:
+    build:
+      context: ./docker/social-analyzer
+      dockerfile: Dockerfile
+    image: deskred-social-analyzer
+    profiles:
+      - tools
+    networks:
+      - osint-network
+    volumes:
+      - social_analyzer_results:/app/results
+
+  spiderfoot:
+    build:
+      context: ./docker/spiderfoot
+      dockerfile: Dockerfile
+    image: deskred-spiderfoot
+    profiles:
+      - tools
+    networks:
+      - osint-network
+    volumes:
+      - spiderfoot_results:/app/results
+
+  digitalfootprint:
+    build:
+      context: ./docker/digitalfootprint
+      dockerfile: Dockerfile
+    image: deskred-digitalfootprint
+    profiles:
+      - tools
+    networks:
+      - osint-network
+    volumes:
+      - digitalfootprint_results:/results
+
+  gosearch:
+    build:
+      context: ./docker/gosearch
+      dockerfile: Dockerfile
+    image: deskred-gosearch
+    profiles:
+      - tools
+    networks:
+      - osint-network
+    volumes:
+      - gosearch_results:/results
+
+networks:
+  osint-network:
+    external: true
+    name: osint-network
+
+volumes:
+  osint-results:
+    name: osint-results
+  redis-data:
+    name: redis-data
+  maigret_results:
+    name: maigret_results
+  spiderfoot_results:
+    name: spiderfoot_results
+  holehe_results:
+    name: holehe_results
+  harvester_results:
+    name: harvester_results
+  sherlock_results:
+    name: sherlock_results
+  recon_ng_results:
+    name: recon_ng_results
+  social_analyzer_results:
+    name: social_analyzer_results
+  digitalfootprint_results:
+    name: digitalfootprint_results
+  gosearch_results:
+    name: gosearch_results
