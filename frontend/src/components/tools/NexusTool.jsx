@@ -1,16 +1,14 @@
 import { useState, useEffect } from 'react';
-import Plot from 'react-plotly.js';
+import { Search, RotateCw, List, Eye, FileJson, FileText, Trash2 } from 'lucide-react';
 
 const API_URL = 'http://localhost:8000/api/nexus';
 
-function NexusTool() {
+function NexusTool({ onOpenReport }) {
   const [reports, setReports] = useState([]);
   const [stats, setStats] = useState({ total_reports: 0, total_usernames: 0, connected: false });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedReport, setSelectedReport] = useState(null);
-  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -80,19 +78,6 @@ function NexusTool() {
     }
   };
 
-  const viewReport = async (aggregationId) => {
-    try {
-      const response = await fetch(`${API_URL}/report/${aggregationId}`);
-      const data = await response.json();
-      if (data.status === 'success') {
-        setSelectedReport(data.report);
-        setShowModal(true);
-      }
-    } catch (err) {
-      setError('Error loading report: ' + err.message);
-    }
-  };
-
   const deleteReport = async (aggregationId) => {
     if (!confirm('Are you sure you want to delete this report?')) {
       return;
@@ -156,26 +141,25 @@ function NexusTool() {
       </div>
 
       {/* Search Bar */}
-      <div style={{ display: 'flex', gap: '5px', marginBottom: '10px' }}>
+      <div style={{ display: 'flex', gap: '5px', marginBottom: '10px', alignItems: 'center' }}>
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onKeyPress={handleKeyPress}
           placeholder="Search by username..."
-          style={{
-            flex: 1,
-            padding: '8px',
-            backgroundColor: '#1a0102',
-            border: '1px solid #ff3300',
-            color: '#ff3300',
-            fontFamily: 'Courier New, monospace',
-            fontSize: '12px'
-          }}
+          className="tool-input"
+          style={{ flex: 1 }}
         />
-        <button className="tool-button" onClick={searchReports}>Search</button>
-        <button className="tool-button" onClick={loadReports}>Show All</button>
-        <button className="tool-button" onClick={loadData}>Refresh</button>
+        <button className="tool-button" onClick={searchReports} title="Search">
+          <Search size={16} />
+        </button>
+        <button className="tool-button" onClick={loadReports} title="Show All">
+          <List size={16} />
+        </button>
+        <button className="tool-button" onClick={loadData} title="Refresh">
+          <RotateCw size={16} />
+        </button>
       </div>
 
       {/* Error */}
@@ -240,60 +224,36 @@ function NexusTool() {
                   <td style={{ padding: '6px 8px', border: '1px solid #ff3300', borderTop: 'none' }}>
                     <div style={{ display: 'flex', gap: '3px', flexWrap: 'wrap' }}>
                       <button
-                        onClick={() => viewReport(report.aggregation_id)}
-                        style={{
-                          padding: '3px 6px',
-                          fontSize: '10px',
-                          backgroundColor: '#3399ff',
-                          border: 'none',
-                          color: '#000',
-                          cursor: 'pointer',
-                          fontFamily: 'Courier New, monospace'
-                        }}
+                        onClick={() => onOpenReport(report.aggregation_id, report.username)}
+                        className="tool-button"
+                        style={{ padding: '4px 8px' }}
+                        title="View Report"
                       >
-                        View
+                        <Eye size={14} />
                       </button>
                       <button
                         onClick={() => exportReport(report.aggregation_id, 'json')}
-                        style={{
-                          padding: '3px 6px',
-                          fontSize: '10px',
-                          backgroundColor: '#00ff00',
-                          border: 'none',
-                          color: '#000',
-                          cursor: 'pointer',
-                          fontFamily: 'Courier New, monospace'
-                        }}
+                        className="tool-button"
+                        style={{ padding: '4px 8px' }}
+                        title="Export JSON"
                       >
-                        JSON
+                        <FileJson size={14} />
                       </button>
                       <button
                         onClick={() => exportReport(report.aggregation_id, 'pdf')}
-                        style={{
-                          padding: '3px 6px',
-                          fontSize: '10px',
-                          backgroundColor: '#00ff00',
-                          border: 'none',
-                          color: '#000',
-                          cursor: 'pointer',
-                          fontFamily: 'Courier New, monospace'
-                        }}
+                        className="tool-button"
+                        style={{ padding: '4px 8px' }}
+                        title="Export PDF"
                       >
-                        PDF
+                        <FileText size={14} />
                       </button>
                       <button
                         onClick={() => deleteReport(report.aggregation_id)}
-                        style={{
-                          padding: '3px 6px',
-                          fontSize: '10px',
-                          backgroundColor: '#ff0000',
-                          border: 'none',
-                          color: '#000',
-                          cursor: 'pointer',
-                          fontFamily: 'Courier New, monospace'
-                        }}
+                        className="tool-button"
+                        style={{ padding: '4px 8px', backgroundColor: '#cc2200' }}
+                        title="Delete Report"
                       >
-                        Del
+                        <Trash2 size={14} />
                       </button>
                     </div>
                   </td>
@@ -301,175 +261,6 @@ function NexusTool() {
               ))}
             </tbody>
           </table>
-        </div>
-      )}
-
-      {/* Modal */}
-      {showModal && selectedReport && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.9)',
-          zIndex: 10000,
-          overflowY: 'auto',
-          padding: '20px'
-        }}
-        onClick={() => setShowModal(false)}
-        >
-          <div style={{
-            maxWidth: '950px',
-            margin: '0 auto',
-            backgroundColor: '#160909',
-            border: '2px solid #ff3300',
-            padding: '20px',
-            position: 'relative'
-          }}
-          onClick={(e) => e.stopPropagation()}
-          >
-            <span
-              onClick={() => setShowModal(false)}
-              style={{
-                position: 'absolute',
-                top: '10px',
-                right: '20px',
-                fontSize: '24px',
-                cursor: 'pointer',
-                color: '#ff3300'
-              }}
-            >
-              &times;
-            </span>
-
-            <h2 style={{ color: '#ff3300', marginBottom: '15px', fontSize: '18px' }}>
-              OBSCURA REPORT - {selectedReport.username}
-            </h2>
-            <p style={{ fontSize: '12px' }}><strong>Report ID:</strong> {selectedReport.aggregation_id}</p>
-            <p style={{ fontSize: '12px' }}><strong>Generated:</strong> {new Date(selectedReport.created_at).toLocaleString()}</p>
-
-            <h3 style={{ color: '#3399ff', marginTop: '15px', marginBottom: '10px', fontSize: '14px' }}>Summary</h3>
-            <p style={{ fontSize: '12px' }}>Total Profiles Found: <strong>{selectedReport.report.summary.total_profiles_found}</strong></p>
-            <p style={{ fontSize: '12px' }}>Unique Sites: <strong>{selectedReport.report.summary.unique_sites}</strong></p>
-            <p style={{ fontSize: '12px' }}>Tools Run: {selectedReport.report.summary.tools_run}</p>
-
-            <h3 style={{ color: '#3399ff', marginTop: '15px', marginBottom: '10px', fontSize: '14px' }}>Results by Tool</h3>
-            {selectedReport.report.by_tool.map((t, i) => (
-              <p key={i} style={{ fontSize: '11px' }}>[{t.tool}] Found: <strong>{t.found}</strong></p>
-            ))}
-
-            {/* Visualizations */}
-            {selectedReport.visualization && (
-              <>
-                <h3 style={{ color: '#3399ff', marginTop: '20px', marginBottom: '10px', fontSize: '14px' }}>Visualizations</h3>
-
-                {/* Category Breakdown */}
-                {selectedReport.visualization.category_breakdown && (
-                  <div style={{ marginBottom: '15px' }}>
-                    <h4 style={{ color: '#ff3300', fontSize: '12px', marginBottom: '5px' }}>Category Breakdown</h4>
-                    <Plot
-                      data={selectedReport.visualization.category_breakdown.data}
-                      layout={{
-                        ...selectedReport.visualization.category_breakdown.layout,
-                        width: 850,
-                        height: 300,
-                        paper_bgcolor: '#160909',
-                        plot_bgcolor: '#160909',
-                        font: { color: '#ff3300', family: 'Courier New, monospace' }
-                      }}
-                      config={{ displayModeBar: false }}
-                    />
-                  </div>
-                )}
-
-                {/* Platform Distribution */}
-                {selectedReport.visualization.platform_distribution && (
-                  <div style={{ marginBottom: '15px' }}>
-                    <h4 style={{ color: '#ff3300', fontSize: '12px', marginBottom: '5px' }}>Platform Distribution</h4>
-                    <Plot
-                      data={selectedReport.visualization.platform_distribution.data}
-                      layout={{
-                        ...selectedReport.visualization.platform_distribution.layout,
-                        width: 850,
-                        height: 400,
-                        paper_bgcolor: '#160909',
-                        plot_bgcolor: '#160909',
-                        font: { color: '#ff3300', family: 'Courier New, monospace' }
-                      }}
-                      config={{ displayModeBar: false }}
-                    />
-                  </div>
-                )}
-
-                {/* Network Graph */}
-                {selectedReport.visualization.network_graph && (
-                  <div style={{ marginBottom: '15px' }}>
-                    <h4 style={{ color: '#ff3300', fontSize: '12px', marginBottom: '5px' }}>Profile Network</h4>
-                    <Plot
-                      data={selectedReport.visualization.network_graph.data}
-                      layout={{
-                        ...selectedReport.visualization.network_graph.layout,
-                        width: 850,
-                        height: 500,
-                        paper_bgcolor: '#160909',
-                        plot_bgcolor: '#160909',
-                        font: { color: '#ff3300', family: 'Courier New, monospace' }
-                      }}
-                      config={{ displayModeBar: false }}
-                    />
-                  </div>
-                )}
-
-                {/* Tool Comparison */}
-                {selectedReport.visualization.tool_comparison && (
-                  <div style={{ marginBottom: '15px' }}>
-                    <h4 style={{ color: '#ff3300', fontSize: '12px', marginBottom: '5px' }}>Tool Comparison</h4>
-                    <Plot
-                      data={selectedReport.visualization.tool_comparison.data}
-                      layout={{
-                        ...selectedReport.visualization.tool_comparison.layout,
-                        width: 850,
-                        height: 300,
-                        paper_bgcolor: '#160909',
-                        plot_bgcolor: '#160909',
-                        font: { color: '#ff3300', family: 'Courier New, monospace' }
-                      }}
-                      config={{ displayModeBar: false }}
-                    />
-                  </div>
-                )}
-              </>
-            )}
-
-            <h3 style={{ color: '#3399ff', marginTop: '15px', marginBottom: '10px', fontSize: '14px' }}>
-              Found Profiles ({selectedReport.report.all_profiles.length})
-            </h3>
-            <div style={{ maxHeight: '300px', overflowY: 'auto', fontSize: '11px' }}>
-              {Object.entries(selectedReport.report.by_site).map(([site, profiles]) => (
-                <div key={site} style={{ marginBottom: '10px' }}>
-                  <div style={{ color: '#3399ff', fontWeight: 'bold', marginBottom: '3px' }}>[{site}]</div>
-                  {profiles.map((profile, i) => (
-                    <a
-                      key={i}
-                      href={profile.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        color: '#ff3300',
-                        textDecoration: 'none',
-                        display: 'block',
-                        paddingLeft: '15px',
-                        marginBottom: '2px'
-                      }}
-                    >
-                      {profile.url}
-                    </a>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       )}
     </div>

@@ -10,6 +10,7 @@ import HoleheTool from './components/tools/HoleheTool';
 import GenericTool from './components/tools/GenericTool';
 import AccountHunterTool from './components/tools/AccountHunterTool';
 import NexusTool from './components/tools/NexusTool';
+import NexusReportViewer from './components/tools/NexusReportViewer';
 
 function App() {
   const [windows, setWindows] = useState([]);
@@ -29,8 +30,8 @@ function App() {
   });
   const [draggedIcon, setDraggedIcon] = useState(null);
 
-  const openWindow = (appId) => {
-    console.log('Opening window for app:', appId);
+  const openWindow = (appId, params = {}) => {
+    console.log('Opening window for app:', appId, params);
     const app = applications.find(a => a.id === appId);
     console.log('Found app:', app);
 
@@ -47,7 +48,7 @@ function App() {
     }
 
     // Check if window is already open
-    const existingWindow = windows.find(w => w.appId === appId);
+    const existingWindow = windows.find(w => w.appId === appId && JSON.stringify(w.params) === JSON.stringify(params));
     if (existingWindow) {
       console.log('Window already exists, focusing:', existingWindow.id);
       setActiveWindowId(existingWindow.id);
@@ -57,8 +58,9 @@ function App() {
     const newWindow = {
       id: `window-${Date.now()}`,
       appId: app.id,
-      title: app.name,
-      subtitle: app.name,
+      title: params.title || app.name,
+      subtitle: params.subtitle || app.name,
+      params,
       initialPosition: {
         x: 40 + windows.length * 30,
         y: 64 + windows.length * 30,
@@ -133,7 +135,9 @@ function App() {
     setDraggedIcon(null);
   };
 
-  const getToolComponent = (appId) => {
+  const getToolComponent = (window) => {
+    const { appId, params } = window;
+
     switch (appId) {
       case 'maigret':
         return <MaigretTool />;
@@ -197,7 +201,15 @@ function App() {
       case 'account-hunter':
         return <AccountHunterTool />;
       case 'nexus':
-        return <NexusTool />;
+        return <NexusTool onOpenReport={(aggregationId, username) => {
+          openWindow('nexus-report-viewer', {
+            aggregationId,
+            title: `Report: ${username}`,
+            subtitle: aggregationId
+          });
+        }} />;
+      case 'nexus-report-viewer':
+        return <NexusReportViewer aggregationId={params.aggregationId} />;
       default:
         return <div>Tool not configured</div>;
     }
@@ -248,7 +260,7 @@ function App() {
               onFocus={focusWindow}
               initialPosition={window.initialPosition}
             >
-              {getToolComponent(window.appId)}
+              {getToolComponent(window)}
             </Window>
           );
         })}
