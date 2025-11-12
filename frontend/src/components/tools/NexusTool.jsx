@@ -149,15 +149,64 @@ function NexusTool({ onOpenReport }) {
           onKeyPress={handleKeyPress}
           placeholder="Search by username..."
           className="tool-input"
-          style={{ flex: 1 }}
+          style={{
+            flex: 1,
+            backgroundColor: '#0a0000',
+            border: '1px solid #ff3300',
+            color: '#ff3300',
+            padding: '8px',
+            fontFamily: 'Courier New, monospace'
+          }}
         />
-        <button className="tool-button" onClick={searchReports} title="Search">
+        <button
+          className="tool-button"
+          onClick={searchReports}
+          title="Search"
+          style={{
+            backgroundColor: '#0a0000',
+            border: '1px solid #ff3300',
+            color: '#ff3300',
+            padding: '8px 12px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
           <Search size={16} />
         </button>
-        <button className="tool-button" onClick={loadReports} title="Show All">
+        <button
+          className="tool-button"
+          onClick={loadReports}
+          title="Show All"
+          style={{
+            backgroundColor: '#0a0000',
+            border: '1px solid #ff3300',
+            color: '#ff3300',
+            padding: '8px 12px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
           <List size={16} />
         </button>
-        <button className="tool-button" onClick={loadData} title="Refresh">
+        <button
+          className="tool-button"
+          onClick={loadData}
+          title="Refresh"
+          style={{
+            backgroundColor: '#0a0000',
+            border: '1px solid #ff3300',
+            color: '#ff3300',
+            padding: '8px 12px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
           <RotateCw size={16} />
         </button>
       </div>
@@ -225,33 +274,65 @@ function NexusTool({ onOpenReport }) {
                     <div style={{ display: 'flex', gap: '3px', flexWrap: 'wrap' }}>
                       <button
                         onClick={() => onOpenReport(report.aggregation_id, report.username)}
-                        className="tool-button"
-                        style={{ padding: '4px 8px' }}
                         title="View Report"
+                        style={{
+                          backgroundColor: '#0a0000',
+                          border: '1px solid #ff3300',
+                          color: '#ff3300',
+                          padding: '4px 8px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
                       >
                         <Eye size={14} />
                       </button>
                       <button
                         onClick={() => exportReport(report.aggregation_id, 'json')}
-                        className="tool-button"
-                        style={{ padding: '4px 8px' }}
                         title="Export JSON"
+                        style={{
+                          backgroundColor: '#0a0000',
+                          border: '1px solid #ff3300',
+                          color: '#ff3300',
+                          padding: '4px 8px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
                       >
                         <FileJson size={14} />
                       </button>
                       <button
                         onClick={() => exportReport(report.aggregation_id, 'pdf')}
-                        className="tool-button"
-                        style={{ padding: '4px 8px' }}
                         title="Export PDF"
+                        style={{
+                          backgroundColor: '#0a0000',
+                          border: '1px solid #ff3300',
+                          color: '#ff3300',
+                          padding: '4px 8px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
                       >
                         <FileText size={14} />
                       </button>
                       <button
                         onClick={() => deleteReport(report.aggregation_id)}
-                        className="tool-button"
-                        style={{ padding: '4px 8px', backgroundColor: '#cc2200' }}
                         title="Delete Report"
+                        style={{
+                          backgroundColor: '#0a0000',
+                          border: '1px solid #ff0000',
+                          color: '#ff0000',
+                          padding: '4px 8px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
                       >
                         <Trash2 size={14} />
                       </button>
