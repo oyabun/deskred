@@ -245,7 +245,7 @@ class ReportParser:
         """Format report as readable text"""
         lines = []
         lines.append("=" * 70)
-        lines.append(f"ACCOUNT HUNTER REPORT - Username: {username}")
+        lines.append(f"OBSCURA REPORT - Username: {username}")
         lines.append("=" * 70)
         lines.append("")
 

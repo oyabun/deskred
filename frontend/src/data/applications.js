@@ -65,8 +65,8 @@ export const applications = [
   },
   {
     id: 'account-hunter',
-    name: 'Account Hunter',
-    icon: 'Network',
+    name: 'Obscura',
+    icon: 'Eclipse',
     description: 'Meta-tool: Run all username OSINT tools in parallel',
     endpoint: '/api/account-hunter',
   },

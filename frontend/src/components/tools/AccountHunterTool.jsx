@@ -355,7 +355,7 @@ function AccountHunterTool() {
               {report ? (
                 <div>
                   <h3 style={{ color: '#ff3300', marginTop: 0, fontSize: '16px' }}>
-                    SUMMARY
+                    OBSCURA REPORT - SUMMARY
                   </h3>
                   <div style={{ color: '#ff3300', fontSize: '12px', marginBottom: '20px' }}>
                     <div>Total Profiles Found: <strong>{report.summary.total_profiles_found}</strong></div>
