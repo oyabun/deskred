@@ -32,19 +32,30 @@ function App() {
 
   const openWindow = (appId, params = {}) => {
     console.log('Opening window for app:', appId, params);
-    const app = applications.find(a => a.id === appId);
-    console.log('Found app:', app);
 
-    if (!app) {
-      console.error('App not found:', appId);
-      return;
-    }
+    // Special handling for internal-only apps (like nexus-report-viewer)
+    const internalApps = ['nexus-report-viewer'];
+    const isInternalApp = internalApps.includes(appId);
 
-    // Handle external applications - open in new browser tab
-    if (app.external) {
-      console.log('Opening external app:', app.endpoint);
-      window.open(app.endpoint, '_blank');
-      return;
+    let app;
+    if (isInternalApp) {
+      // Create a temporary app object for internal apps
+      app = { id: appId, name: params.title || 'Report Viewer' };
+    } else {
+      app = applications.find(a => a.id === appId);
+      console.log('Found app:', app);
+
+      if (!app) {
+        console.error('App not found:', appId);
+        return;
+      }
+
+      // Handle external applications - open in new browser tab
+      if (app.external) {
+        console.log('Opening external app:', app.endpoint);
+        window.open(app.endpoint, '_blank');
+        return;
+      }
     }
 
     // Check if window is already open
