@@ -187,6 +187,20 @@ services:
     volumes:
       - nexus_results:/results
 
+  nexus-app:
+    build:
+      context: ./docker/nexus-app
+      dockerfile: Dockerfile
+    image: deskred-nexus-app
+    container_name: nexus-app
+    ports:
+      - "8080:8080"
+    networks:
+      - osint-network
+    restart: unless-stopped
+    depends_on:
+      - backend
+
 networks:
   osint-network:
     external: true

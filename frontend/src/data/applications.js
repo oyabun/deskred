@@ -70,4 +70,12 @@ export const applications = [
     description: 'Meta-tool: Run all username OSINT tools in parallel',
     endpoint: '/api/account-hunter',
   },
+  {
+    id: 'nexus',
+    name: 'Nexus',
+    icon: 'Database',
+    description: 'Browse, search, and export cached OSINT reports',
+    endpoint: 'http://localhost:8080',
+    external: true,
+  },
 ];

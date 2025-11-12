@@ -15,6 +15,7 @@ import logging
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from docker_helper import docker_helper, running_containers
 from utils.report_parser import ReportParser
+from redis_helper import redis_helper
 
 logger = logging.getLogger(__name__)
 
@@ -279,6 +280,9 @@ async def get_aggregation_report(aggregation_id: str, format: str = "json"):
     # Generate report
     report = ReportParser.generate_report(all_logs)
 
+    # Save report to Redis
+    redis_helper.save_report(aggregation_id, aggregation["username"], report)
+
     if format == "text":
         text_report = ReportParser.format_report_text(report, aggregation["username"])
         return {
@@ -348,6 +352,17 @@ async def visualize_aggregation(aggregation_id: str):
             output = result.get("output", "")
             try:
                 visualization_data = json.loads(output)
+
+                # Update Redis with visualization data
+                cached_report = redis_helper.get_report(aggregation_id)
+                if cached_report:
+                    redis_helper.save_report(
+                        aggregation_id,
+                        aggregation["username"],
+                        cached_report["report"],
+                        visualization_data
+                    )
+
                 return {
                     "status": "success",
                     "aggregation_id": aggregation_id,

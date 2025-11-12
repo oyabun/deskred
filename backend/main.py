@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import maigret, spiderfoot, holehe, harvester, sherlock, recon_ng, social_analyzer, logs, digitalfootprint, gosearch, account_hunter
+from routers import maigret, spiderfoot, holehe, harvester, sherlock, recon_ng, social_analyzer, logs, digitalfootprint, gosearch, account_hunter, nexus
 
 app = FastAPI(
     title="OSINT Dashboard API",
@@ -33,6 +33,7 @@ app.include_router(social_analyzer.router, prefix="/api/social-analyzer", tags=[
 app.include_router(digitalfootprint.router, prefix="/api/digitalfootprint", tags=["DigitalFootprint"])
 app.include_router(gosearch.router, prefix="/api/gosearch", tags=["GoSearch"])
 app.include_router(account_hunter.router, tags=["AccountHunter"])
+app.include_router(nexus.router, tags=["Nexus"])
 app.include_router(logs.router, prefix="/api/logs", tags=["Logs"])
 
 @app.get("/")

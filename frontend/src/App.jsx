@@ -38,6 +38,13 @@ function App() {
       return;
     }
 
+    // Handle external applications - open in new browser tab
+    if (app.external) {
+      console.log('Opening external app:', app.endpoint);
+      window.open(app.endpoint, '_blank');
+      return;
+    }
+
     // Check if window is already open
     const existingWindow = windows.find(w => w.appId === appId);
     if (existingWindow) {
