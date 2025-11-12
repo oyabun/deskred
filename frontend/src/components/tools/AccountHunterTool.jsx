@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import Plot from 'react-plotly.js';
 
 function AccountHunterTool() {
   const [username, setUsername] = useState('');
@@ -7,8 +8,11 @@ function AccountHunterTool() {
   const [toolLogs, setToolLogs] = useState({});
   const [isRunning, setIsRunning] = useState(false);
   const [selectedTool, setSelectedTool] = useState('all');
-  const [activeTab, setActiveTab] = useState('status'); // 'status' or 'report'
+  const [activeTab, setActiveTab] = useState('status'); // 'status', 'report', or 'visualize'
   const [report, setReport] = useState(null);
+  const [visualizations, setVisualizations] = useState(null);
+  const [vizLoading, setVizLoading] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const statusIntervalRef = useRef(null);
   const logsIntervalRef = useRef(null);
 
@@ -18,6 +22,46 @@ function AccountHunterTool() {
     'social-analyzer': 'Social Analyzer',
     'digitalfootprint': 'Digital Footprint',
     'gosearch': 'GoSearch'
+  };
+
+  const categories = {
+    'Social Media': ['twitter', 'facebook', 'instagram', 'tiktok', 'snapchat', 'linkedin', 'reddit', 'mastodon'],
+    'Professional': ['linkedin', 'github', 'gitlab', 'stackoverflow', 'behance', 'dribbble', 'deviantart'],
+    'Gaming': ['steam', 'xbox', 'playstation', 'twitch', 'discord', 'epicgames', 'chess.com', 'boardgamegeek'],
+    'Media': ['youtube', 'vimeo', 'soundcloud', 'spotify', 'bandcamp', 'mixcloud', 'audiojungle'],
+    'Forums': ['reddit', 'hackernews', 'bbpress', 'discourse'],
+    'Finance': ['cash.app', 'paypal', 'venmo', 'patreon'],
+    'Creative': ['behance', 'dribbble', 'deviantart', 'artstation', 'codepen', 'themeforest'],
+    'Other': []
+  };
+
+  const categorizeSite = (site) => {
+    const siteLower = site.toLowerCase();
+    for (const [category, keywords] of Object.entries(categories)) {
+      for (const keyword of keywords) {
+        if (siteLower.includes(keyword)) {
+          return category;
+        }
+      }
+    }
+    return 'Other';
+  };
+
+  const getFilteredProfiles = () => {
+    if (!report || !report.by_site) return {};
+
+    if (selectedCategory === 'all') {
+      return report.by_site;
+    }
+
+    const filtered = {};
+    for (const [site, profiles] of Object.entries(report.by_site)) {
+      const category = categorizeSite(site);
+      if (category === selectedCategory) {
+        filtered[site] = profiles;
+      }
+    }
+    return filtered;
   };
 
   useEffect(() => {
@@ -136,6 +180,26 @@ function AccountHunterTool() {
     }
   };
 
+  const fetchVisualizations = async () => {
+    if (!aggregationId) return;
+
+    setVizLoading(true);
+    try {
+      const response = await fetch(`http://localhost:8000/api/account-hunter/visualize/${aggregationId}`);
+      const data = await response.json();
+
+      if (data.status === 'success') {
+        setVisualizations(data.visualizations.graphs);
+      } else {
+        console.error('Visualization error:', data.message);
+      }
+    } catch (error) {
+      console.error('Error fetching visualizations:', error);
+    } finally {
+      setVizLoading(false);
+    }
+  };
+
   return (
     <div style={{ padding: '20px' }}>
       <div style={{ marginBottom: '20px' }}>
@@ -243,6 +307,26 @@ function AccountHunterTool() {
               }}
             >
               Report
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab('visualize');
+                fetchVisualizations();
+              }}
+              disabled={aggregationStatus.summary.running > 0}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: activeTab === 'visualize' ? '#ff3300' : 'transparent',
+                border: '1px solid #ff3300',
+                color: activeTab === 'visualize' ? '#160909' : '#ff3300',
+                fontFamily: 'Fira Mono, monospace',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                cursor: aggregationStatus.summary.running > 0 ? 'not-allowed' : 'pointer',
+                opacity: aggregationStatus.summary.running > 0 ? 0.5 : 1,
+              }}
+            >
+              Visualizations
             </button>
           </div>
 
@@ -377,19 +461,64 @@ function AccountHunterTool() {
 
                   {report.all_profiles && report.all_profiles.length > 0 ? (
                     <>
-                      <h3 style={{ color: '#ff3300', fontSize: '16px' }}>
-                        FOUND PROFILES ({report.all_profiles.length})
-                      </h3>
+                      <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <h3 style={{ color: '#ff3300', fontSize: '16px', margin: 0 }}>
+                          FOUND PROFILES
+                        </h3>
+                        <label style={{ color: '#ff3300', fontSize: '12px', marginLeft: '20px' }}>
+                          Filter by Category:
+                        </label>
+                        <select
+                          value={selectedCategory}
+                          onChange={(e) => setSelectedCategory(e.target.value)}
+                          style={{
+                            padding: '5px 10px',
+                            backgroundColor: '#1a0102',
+                            border: '1px solid #ff3300',
+                            color: '#ff3300',
+                            fontFamily: 'Fira Mono, monospace',
+                            fontSize: '12px',
+                          }}
+                        >
+                          <option value="all">All Categories ({report.all_profiles.length})</option>
+                          {Object.keys(categories).map(category => {
+                            const count = Object.entries(report.by_site).filter(([site]) =>
+                              categorizeSite(site) === category
+                            ).length;
+                            return count > 0 ? (
+                              <option key={category} value={category}>
+                                {category} ({count})
+                              </option>
+                            ) : null;
+                          })}
+                        </select>
+                      </div>
                       <div style={{ maxHeight: '400px', overflow: 'auto' }}>
-                        {Object.entries(report.by_site).map(([site, profiles]) => (
+                        {Object.entries(getFilteredProfiles()).map(([site, profiles]) => (
                           <div key={site} style={{ marginBottom: '20px' }}>
                             <div style={{
-                              color: '#3399ff',
-                              fontSize: '13px',
-                              fontWeight: 'bold',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '10px',
                               marginBottom: '10px',
                             }}>
-                              [{site}]
+                              <div style={{
+                                color: '#3399ff',
+                                fontSize: '13px',
+                                fontWeight: 'bold',
+                              }}>
+                                [{site}]
+                              </div>
+                              <span style={{
+                                fontSize: '10px',
+                                padding: '2px 6px',
+                                backgroundColor: 'rgba(255, 51, 0, 0.2)',
+                                border: '1px solid #ff3300',
+                                color: '#ff3300',
+                                borderRadius: '3px',
+                              }}>
+                                {categorizeSite(site)}
+                              </span>
                             </div>
                             {profiles.map((profile, idx) => (
                               <div key={idx} style={{
@@ -429,6 +558,86 @@ function AccountHunterTool() {
               ) : (
                 <div style={{ color: '#ff3300', fontSize: '12px' }}>
                   Loading report...
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'visualize' && (
+            <div style={{
+              border: '1px solid #ff3300',
+              backgroundColor: '#0a0000',
+              padding: '20px',
+            }}>
+              {vizLoading ? (
+                <div style={{ color: '#ff3300', fontSize: '12px' }}>
+                  Generating visualizations...
+                </div>
+              ) : visualizations ? (
+                <div>
+                  <h3 style={{ color: '#ff3300', marginTop: 0, fontSize: '16px' }}>
+                    NEXUS VISUALIZATIONS
+                  </h3>
+
+                  {/* Network Graph */}
+                  <div style={{ marginBottom: '40px' }}>
+                    <h4 style={{ color: '#3399ff', fontSize: '14px' }}>Profile Network</h4>
+                    <Plot
+                      data={visualizations.network.data}
+                      layout={{
+                        ...visualizations.network.layout,
+                        autosize: true,
+                      }}
+                      config={{ responsive: true, displayModeBar: false }}
+                      style={{ width: '100%', height: '500px' }}
+                    />
+                  </div>
+
+                  {/* Category Breakdown */}
+                  <div style={{ marginBottom: '40px' }}>
+                    <h4 style={{ color: '#3399ff', fontSize: '14px' }}>Platform Categories</h4>
+                    <Plot
+                      data={visualizations.categories.data}
+                      layout={{
+                        ...visualizations.categories.layout,
+                        autosize: true,
+                      }}
+                      config={{ responsive: true, displayModeBar: false }}
+                      style={{ width: '100%', height: '400px' }}
+                    />
+                  </div>
+
+                  {/* Platform Bar Chart */}
+                  <div style={{ marginBottom: '40px' }}>
+                    <h4 style={{ color: '#3399ff', fontSize: '14px' }}>Top Platforms</h4>
+                    <Plot
+                      data={visualizations.platforms.data}
+                      layout={{
+                        ...visualizations.platforms.layout,
+                        autosize: true,
+                      }}
+                      config={{ responsive: true, displayModeBar: false }}
+                      style={{ width: '100%', height: '400px' }}
+                    />
+                  </div>
+
+                  {/* Tool Comparison */}
+                  <div style={{ marginBottom: '20px' }}>
+                    <h4 style={{ color: '#3399ff', fontSize: '14px' }}>Findings by Tool</h4>
+                    <Plot
+                      data={visualizations.tools.data}
+                      layout={{
+                        ...visualizations.tools.layout,
+                        autosize: true,
+                      }}
+                      config={{ responsive: true, displayModeBar: false }}
+                      style={{ width: '100%', height: '400px' }}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div style={{ color: '#ff3300', fontSize: '12px' }}>
+                  No visualizations available.
                 </div>
               )}
             </div>

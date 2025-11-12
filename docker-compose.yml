@@ -175,6 +175,18 @@ services:
     volumes:
       - gosearch_results:/results
 
+  nexus:
+    build:
+      context: ./docker/nexus
+      dockerfile: Dockerfile
+    image: deskred-nexus
+    profiles:
+      - tools
+    networks:
+      - osint-network
+    volumes:
+      - nexus_results:/results
+
 networks:
   osint-network:
     external: true
@@ -203,3 +215,5 @@ volumes:
     name: digitalfootprint_results
   gosearch_results:
     name: gosearch_results
+  nexus_results:
+    name: nexus_results

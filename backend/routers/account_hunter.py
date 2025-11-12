@@ -298,6 +298,79 @@ async def get_aggregation_report(aggregation_id: str, format: str = "json"):
         }
 
 
+@router.get("/visualize/{aggregation_id}")
+async def visualize_aggregation(aggregation_id: str):
+    """
+    Generate interactive visualizations from aggregation report
+    Uses Nexus visualization tool to create graphs
+    """
+    if aggregation_id not in running_aggregations:
+        raise HTTPException(status_code=404, detail="Aggregation not found")
+
+    aggregation = running_aggregations[aggregation_id]
+
+    # Get all tool logs
+    all_logs = {}
+    for tool_id, tool_data in aggregation["tools"].items():
+        if "container_id" in tool_data:
+            try:
+                logs_result = docker_helper.get_container_logs(tool_data["container_id"])
+                all_logs[tool_id] = {
+                    "name": tool_data["name"],
+                    "status": logs_result.get("container_status", "unknown"),
+                    "logs": logs_result.get("logs", "")
+                }
+            except Exception as e:
+                all_logs[tool_id] = {
+                    "name": tool_data["name"],
+                    "status": "error",
+                    "error": str(e),
+                    "logs": ""
+                }
+
+    # Generate report
+    report = ReportParser.generate_report(all_logs)
+
+    # Convert report to JSON for passing to Nexus
+    import json
+    report_json = json.dumps(report)
+
+    # Run Nexus visualization container
+    try:
+        result = docker_helper.run_container(
+            image="deskred-nexus",
+            command=[report_json, aggregation["username"]],
+            timeout=30
+        )
+
+        if result["status"] == "success":
+            # Parse the visualization output
+            output = result.get("output", "")
+            try:
+                visualization_data = json.loads(output)
+                return {
+                    "status": "success",
+                    "aggregation_id": aggregation_id,
+                    "username": aggregation["username"],
+                    "visualizations": visualization_data
+                }
+            except json.JSONDecodeError as e:
+                logger.error(f"Failed to parse Nexus output: {e}")
+                return {
+                    "status": "error",
+                    "message": "Failed to parse visualization data",
+                    "raw_output": output
+                }
+        else:
+            return {
+                "status": "error",
+                "message": result.get("error", "Failed to generate visualizations")
+            }
+    except Exception as e:
+        logger.error(f"Error running Nexus visualization: {e}")
+        raise HTTPException(status_code=500, detail=f"Visualization error: {str(e)}")
+
+
 @router.delete("/cleanup/{aggregation_id}")
 async def cleanup_aggregation(aggregation_id: str):
     """
