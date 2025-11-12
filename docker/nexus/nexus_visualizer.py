@@ -17,13 +17,19 @@ def categorize_platform(site):
     site_lower = site.lower()
 
     categories = {
-        'Social Media': ['twitter', 'facebook', 'instagram', 'tiktok', 'snapchat', 'linkedin', 'reddit', 'mastodon'],
-        'Professional': ['linkedin', 'github', 'gitlab', 'stackoverflow', 'behance', 'dribbble', 'deviantart'],
-        'Gaming': ['steam', 'xbox', 'playstation', 'twitch', 'discord', 'epicgames', 'chess.com', 'boardgamegeek'],
-        'Media': ['youtube', 'vimeo', 'soundcloud', 'spotify', 'bandcamp', 'mixcloud', 'audiojungle'],
-        'Forums': ['reddit', 'hackernews', 'bbpress', 'discourse'],
-        'Finance': ['cash.app', 'paypal', 'venmo', 'patreon'],
-        'Creative': ['behance', 'dribbble', 'deviantart', 'artstation', 'codepen', 'themeforest'],
+        'Social Media': ['twitter', 'facebook', 'instagram', 'tiktok', 'snapchat', 'linkedin', 'reddit', 'mastodon', 'telegram', 'whatsapp', 'signal'],
+        'Professional': ['linkedin', 'github', 'gitlab', 'stackoverflow', 'behance', 'dribbble', 'deviantart', 'freelancer', 'upwork', 'fiverr'],
+        'Gaming': ['steam', 'xbox', 'playstation', 'twitch', 'discord', 'epicgames', 'chess.com', 'boardgamegeek', 'roblox', 'minecraft'],
+        'Media': ['youtube', 'vimeo', 'soundcloud', 'spotify', 'bandcamp', 'mixcloud', 'audiojungle', 'podcast', 'medium'],
+        'Forums': ['reddit', 'hackernews', 'bbpress', 'discourse', 'quora', '4chan', '8chan'],
+        'Finance': ['cash.app', 'paypal', 'venmo', 'patreon', 'cashapp', 'bitcoin', 'crypto', 'binance', 'coinbase'],
+        'Creative': ['behance', 'dribbble', 'deviantart', 'artstation', 'codepen', 'themeforest', 'etsy', 'redbubble'],
+        'Dating': ['tinder', 'bumble', 'hinge', 'okcupid', 'match', 'pof', 'badoo', 'grindr', 'lovoo', 'meetme', 'dating'],
+        'Adult': ['onlyfans', 'pornhub', 'xvideos', 'xhamster', 'chaturbate', 'stripchat', 'cam4', 'myfreecams', 'adult', 'nsfw', 'xxx', 'porn', 'fetlife'],
+        'Shopping': ['amazon', 'ebay', 'etsy', 'aliexpress', 'wish', 'mercari', 'poshmark', 'depop', 'shop'],
+        'Travel': ['airbnb', 'booking', 'tripadvisor', 'expedia', 'hotels', 'skyscanner', 'hostelworld'],
+        'Education': ['coursera', 'udemy', 'edx', 'khan', 'duolingo', 'skillshare', 'codecademy', 'education'],
+        'Business': ['crunchbase', 'angellist', 'producthunt', 'yelp', 'glassdoor', 'trustpilot', 'business'],
         'Other': []
     }
 
@@ -116,6 +122,12 @@ def create_network_graph(report_data, username):
         'Forums': '#aa96da',
         'Finance': '#fcbad3',
         'Creative': '#ffffd2',
+        'Dating': '#ff69b4',
+        'Adult': '#ff1493',
+        'Shopping': '#ffa500',
+        'Travel': '#87ceeb',
+        'Education': '#9370db',
+        'Business': '#20b2aa',
         'Other': '#999999'
     }
 
@@ -174,7 +186,7 @@ def create_category_breakdown(report_data):
         values=list(categories.values()),
         hole=0.3,
         marker=dict(
-            colors=['#ff6b6b', '#4ecdc4', '#95e1d3', '#f38181', '#aa96da', '#fcbad3', '#ffffd2', '#999999'],
+            colors=['#ff6b6b', '#4ecdc4', '#95e1d3', '#f38181', '#aa96da', '#fcbad3', '#ffffd2', '#ff69b4', '#ff1493', '#ffa500', '#87ceeb', '#9370db', '#20b2aa', '#999999'],
             line=dict(color='#160909', width=2)
         ),
         textfont=dict(size=12, color='#ffffff')

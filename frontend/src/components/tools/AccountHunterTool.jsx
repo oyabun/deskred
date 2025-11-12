@@ -25,13 +25,19 @@ function AccountHunterTool() {
   };
 
   const categories = {
-    'Social Media': ['twitter', 'facebook', 'instagram', 'tiktok', 'snapchat', 'linkedin', 'reddit', 'mastodon'],
-    'Professional': ['linkedin', 'github', 'gitlab', 'stackoverflow', 'behance', 'dribbble', 'deviantart'],
-    'Gaming': ['steam', 'xbox', 'playstation', 'twitch', 'discord', 'epicgames', 'chess.com', 'boardgamegeek'],
-    'Media': ['youtube', 'vimeo', 'soundcloud', 'spotify', 'bandcamp', 'mixcloud', 'audiojungle'],
-    'Forums': ['reddit', 'hackernews', 'bbpress', 'discourse'],
-    'Finance': ['cash.app', 'paypal', 'venmo', 'patreon'],
-    'Creative': ['behance', 'dribbble', 'deviantart', 'artstation', 'codepen', 'themeforest'],
+    'Social Media': ['twitter', 'facebook', 'instagram', 'tiktok', 'snapchat', 'linkedin', 'reddit', 'mastodon', 'telegram', 'whatsapp', 'signal'],
+    'Professional': ['linkedin', 'github', 'gitlab', 'stackoverflow', 'behance', 'dribbble', 'deviantart', 'freelancer', 'upwork', 'fiverr'],
+    'Gaming': ['steam', 'xbox', 'playstation', 'twitch', 'discord', 'epicgames', 'chess.com', 'boardgamegeek', 'roblox', 'minecraft'],
+    'Media': ['youtube', 'vimeo', 'soundcloud', 'spotify', 'bandcamp', 'mixcloud', 'audiojungle', 'podcast', 'medium'],
+    'Forums': ['reddit', 'hackernews', 'bbpress', 'discourse', 'quora', '4chan', '8chan'],
+    'Finance': ['cash.app', 'paypal', 'venmo', 'patreon', 'cashapp', 'bitcoin', 'crypto', 'binance', 'coinbase'],
+    'Creative': ['behance', 'dribbble', 'deviantart', 'artstation', 'codepen', 'themeforest', 'etsy', 'redbubble'],
+    'Dating': ['tinder', 'bumble', 'hinge', 'okcupid', 'match', 'pof', 'badoo', 'grindr', 'lovoo', 'meetme', 'dating'],
+    'Adult': ['onlyfans', 'pornhub', 'xvideos', 'xhamster', 'chaturbate', 'stripchat', 'cam4', 'myfreecams', 'adult', 'nsfw', 'xxx', 'porn', 'fetlife'],
+    'Shopping': ['amazon', 'ebay', 'etsy', 'aliexpress', 'wish', 'mercari', 'poshmark', 'depop', 'shop'],
+    'Travel': ['airbnb', 'booking', 'tripadvisor', 'expedia', 'hotels', 'skyscanner', 'hostelworld'],
+    'Education': ['coursera', 'udemy', 'edx', 'khan', 'duolingo', 'skillshare', 'codecademy', 'education'],
+    'Business': ['crunchbase', 'angellist', 'producthunt', 'yelp', 'glassdoor', 'trustpilot', 'business'],
     'Other': []
   };
 
