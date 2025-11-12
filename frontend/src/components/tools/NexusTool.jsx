@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Plot from 'react-plotly.js';
 
 const API_URL = 'http://localhost:8000/api/nexus';
 
@@ -319,7 +320,7 @@ function NexusTool() {
         onClick={() => setShowModal(false)}
         >
           <div style={{
-            maxWidth: '900px',
+            maxWidth: '950px',
             margin: '0 auto',
             backgroundColor: '#160909',
             border: '2px solid #ff3300',
@@ -357,6 +358,89 @@ function NexusTool() {
             {selectedReport.report.by_tool.map((t, i) => (
               <p key={i} style={{ fontSize: '11px' }}>[{t.tool}] Found: <strong>{t.found}</strong></p>
             ))}
+
+            {/* Visualizations */}
+            {selectedReport.visualization && (
+              <>
+                <h3 style={{ color: '#3399ff', marginTop: '20px', marginBottom: '10px', fontSize: '14px' }}>Visualizations</h3>
+
+                {/* Category Breakdown */}
+                {selectedReport.visualization.category_breakdown && (
+                  <div style={{ marginBottom: '15px' }}>
+                    <h4 style={{ color: '#ff3300', fontSize: '12px', marginBottom: '5px' }}>Category Breakdown</h4>
+                    <Plot
+                      data={selectedReport.visualization.category_breakdown.data}
+                      layout={{
+                        ...selectedReport.visualization.category_breakdown.layout,
+                        width: 850,
+                        height: 300,
+                        paper_bgcolor: '#160909',
+                        plot_bgcolor: '#160909',
+                        font: { color: '#ff3300', family: 'Courier New, monospace' }
+                      }}
+                      config={{ displayModeBar: false }}
+                    />
+                  </div>
+                )}
+
+                {/* Platform Distribution */}
+                {selectedReport.visualization.platform_distribution && (
+                  <div style={{ marginBottom: '15px' }}>
+                    <h4 style={{ color: '#ff3300', fontSize: '12px', marginBottom: '5px' }}>Platform Distribution</h4>
+                    <Plot
+                      data={selectedReport.visualization.platform_distribution.data}
+                      layout={{
+                        ...selectedReport.visualization.platform_distribution.layout,
+                        width: 850,
+                        height: 400,
+                        paper_bgcolor: '#160909',
+                        plot_bgcolor: '#160909',
+                        font: { color: '#ff3300', family: 'Courier New, monospace' }
+                      }}
+                      config={{ displayModeBar: false }}
+                    />
+                  </div>
+                )}
+
+                {/* Network Graph */}
+                {selectedReport.visualization.network_graph && (
+                  <div style={{ marginBottom: '15px' }}>
+                    <h4 style={{ color: '#ff3300', fontSize: '12px', marginBottom: '5px' }}>Profile Network</h4>
+                    <Plot
+                      data={selectedReport.visualization.network_graph.data}
+                      layout={{
+                        ...selectedReport.visualization.network_graph.layout,
+                        width: 850,
+                        height: 500,
+                        paper_bgcolor: '#160909',
+                        plot_bgcolor: '#160909',
+                        font: { color: '#ff3300', family: 'Courier New, monospace' }
+                      }}
+                      config={{ displayModeBar: false }}
+                    />
+                  </div>
+                )}
+
+                {/* Tool Comparison */}
+                {selectedReport.visualization.tool_comparison && (
+                  <div style={{ marginBottom: '15px' }}>
+                    <h4 style={{ color: '#ff3300', fontSize: '12px', marginBottom: '5px' }}>Tool Comparison</h4>
+                    <Plot
+                      data={selectedReport.visualization.tool_comparison.data}
+                      layout={{
+                        ...selectedReport.visualization.tool_comparison.layout,
+                        width: 850,
+                        height: 300,
+                        paper_bgcolor: '#160909',
+                        plot_bgcolor: '#160909',
+                        font: { color: '#ff3300', family: 'Courier New, monospace' }
+                      }}
+                      config={{ displayModeBar: false }}
+                    />
+                  </div>
+                )}
+              </>
+            )}
 
             <h3 style={{ color: '#3399ff', marginTop: '15px', marginBottom: '10px', fontSize: '14px' }}>
               Found Profiles ({selectedReport.report.all_profiles.length})
