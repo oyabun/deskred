@@ -15,8 +15,9 @@ class ReportParser:
         """Remove ANSI color codes and escape sequences from text"""
         if not text:
             return text
-        # Pattern to match ANSI escape sequences
-        ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+        # Pattern to match all ANSI escape sequences
+        # Matches: \x1B[...m, \033[...m, [92m, [0m, etc.
+        ansi_escape = re.compile(r'(?:\x1B[@-_]|(?:\x1B)?\[[0-9;]*[a-zA-Z])')
         return ansi_escape.sub('', text)
 
     @staticmethod
