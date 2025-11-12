@@ -8,6 +8,7 @@ import MaigretTool from './components/tools/MaigretTool';
 import SherlockTool from './components/tools/SherlockTool';
 import HoleheTool from './components/tools/HoleheTool';
 import GenericTool from './components/tools/GenericTool';
+import AccountHunterTool from './components/tools/AccountHunterTool';
 
 function App() {
   const [windows, setWindows] = useState([]);
@@ -185,6 +186,8 @@ function App() {
           buttonLabel="Search"
           paramName="username"
         />;
+      case 'account-hunter':
+        return <AccountHunterTool />;
       default:
         return <div>Tool not configured</div>;
     }

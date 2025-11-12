@@ -63,4 +63,11 @@ export const applications = [
     description: 'Fast username search across 300+ sites with breach data',
     endpoint: '/api/gosearch',
   },
+  {
+    id: 'account-hunter',
+    name: 'Account Hunter',
+    icon: 'Network',
+    description: 'Meta-tool: Run all username OSINT tools in parallel',
+    endpoint: '/api/account-hunter',
+  },
 ];

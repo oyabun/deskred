@@ -23,7 +23,8 @@ class DockerHelper:
         self,
         image: str,
         command: list,
-        timeout: int = 120
+        timeout: int = 120,
+        auto_remove: bool = True
     ) -> Dict[str, str]:
         """
         Ejecuta un contenedor Docker en modo detached y retorna el container_id
@@ -33,6 +34,7 @@ class DockerHelper:
             image: Nombre de la imagen (ej: "deskred-maigret")
             command: Comando a ejecutar como lista
             timeout: Timeout en segundos
+            auto_remove: Si True, el contenedor se elimina automáticamente al finalizar
 
         Returns:
             Dict con status, container_id y message
@@ -56,7 +58,7 @@ class DockerHelper:
                 detach=True,
                 stdout=True,
                 stderr=True,
-                remove=True,  # Auto-remove when done
+                remove=auto_remove,  # Auto-remove when done (configurable)
                 network="osint-network",
                 volumes={
                     f"{image.replace('deskred-', '')}_results": {
