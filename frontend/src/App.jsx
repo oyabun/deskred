@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './App.css';
 import MenuBar from './components/MenuBar';
-import Window from './components/Window';
+import Window, { MinimizedWindow } from './components/Window';
 import DesktopIcon from './components/DesktopIcon';
 import { applications } from './data/applications';
 import MaigretTool from './components/tools/MaigretTool';
@@ -91,10 +91,21 @@ function App() {
   };
 
   const minimizeWindow = (windowId) => {
-    // Window component handles visibility
+    // Mark window as minimized
+    setWindows(windows.map(w =>
+      w.id === windowId ? { ...w, isMinimized: true } : w
+    ));
     if (activeWindowId === windowId) {
       setActiveWindowId(null);
     }
+  };
+
+  const restoreWindow = (windowId) => {
+    // Restore window from minimized state
+    setWindows(windows.map(w =>
+      w.id === windowId ? { ...w, isMinimized: false } : w
+    ));
+    setActiveWindowId(windowId);
   };
 
   const focusWindow = (windowId) => {
@@ -259,6 +270,9 @@ function App() {
         {/* Windows */}
         {windows.map(window => {
           const app = getAppForWindow(window.id);
+          // Don't render minimized windows here
+          if (window.isMinimized) return null;
+
           return (
             <Window
               key={window.id}
@@ -275,6 +289,29 @@ function App() {
             </Window>
           );
         })}
+
+        {/* Taskbar for minimized windows */}
+        {windows.some(w => w.isMinimized) && (
+          <div style={{
+            position: 'fixed',
+            bottom: '10px',
+            right: '10px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '5px',
+            zIndex: 9999,
+          }}>
+            {windows.filter(w => w.isMinimized).map(window => (
+              <MinimizedWindow
+                key={window.id}
+                id={window.id}
+                title={window.title}
+                onRestore={restoreWindow}
+                onClose={closeWindow}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
