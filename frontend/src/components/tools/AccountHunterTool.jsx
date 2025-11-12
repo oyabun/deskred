@@ -7,6 +7,8 @@ function AccountHunterTool() {
   const [toolLogs, setToolLogs] = useState({});
   const [isRunning, setIsRunning] = useState(false);
   const [selectedTool, setSelectedTool] = useState('all');
+  const [activeTab, setActiveTab] = useState('status'); // 'status' or 'report'
+  const [report, setReport] = useState(null);
   const statusIntervalRef = useRef(null);
   const logsIntervalRef = useRef(null);
 
@@ -119,6 +121,21 @@ function AccountHunterTool() {
     return logs.split('\n').filter(line => line.trim()).join('\n');
   };
 
+  const fetchReport = async () => {
+    if (!aggregationId) return;
+
+    try {
+      const response = await fetch(`http://localhost:8000/api/account-hunter/report/${aggregationId}`);
+      const data = await response.json();
+
+      if (data.status === 'success') {
+        setReport(data.report);
+      }
+    } catch (error) {
+      console.error('Error fetching report:', error);
+    }
+  };
+
   return (
     <div style={{ padding: '20px' }}>
       <div style={{ marginBottom: '20px' }}>
@@ -190,28 +207,69 @@ function AccountHunterTool() {
             </div>
           </div>
 
-          <div style={{ marginBottom: '15px' }}>
-            <label style={{ color: '#ff3300', fontSize: '12px', marginRight: '10px' }}>
-              View Logs:
-            </label>
-            <select
-              value={selectedTool}
-              onChange={(e) => setSelectedTool(e.target.value)}
+          {/* Tab Buttons */}
+          <div style={{ marginBottom: '20px', display: 'flex', gap: '10px' }}>
+            <button
+              onClick={() => setActiveTab('status')}
               style={{
-                padding: '5px 10px',
-                backgroundColor: '#1a0102',
+                padding: '10px 20px',
+                backgroundColor: activeTab === 'status' ? '#ff3300' : 'transparent',
                 border: '1px solid #ff3300',
-                color: '#ff3300',
+                color: activeTab === 'status' ? '#160909' : '#ff3300',
                 fontFamily: 'Fira Mono, monospace',
-                fontSize: '12px',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
               }}
             >
-              <option value="all">All Tools</option>
-              {Object.keys(toolNames).map(toolId => (
-                <option key={toolId} value={toolId}>{toolNames[toolId]}</option>
-              ))}
-            </select>
+              Status & Logs
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab('report');
+                fetchReport();
+              }}
+              disabled={aggregationStatus.summary.running > 0}
+              style={{
+                padding: '10px 20px',
+                backgroundColor: activeTab === 'report' ? '#ff3300' : 'transparent',
+                border: '1px solid #ff3300',
+                color: activeTab === 'report' ? '#160909' : '#ff3300',
+                fontFamily: 'Fira Mono, monospace',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                cursor: aggregationStatus.summary.running > 0 ? 'not-allowed' : 'pointer',
+                opacity: aggregationStatus.summary.running > 0 ? 0.5 : 1,
+              }}
+            >
+              Report
+            </button>
           </div>
+
+          {activeTab === 'status' && (
+            <>
+              <div style={{ marginBottom: '15px' }}>
+                <label style={{ color: '#ff3300', fontSize: '12px', marginRight: '10px' }}>
+                  View Logs:
+                </label>
+                <select
+                  value={selectedTool}
+                  onChange={(e) => setSelectedTool(e.target.value)}
+                  style={{
+                    padding: '5px 10px',
+                    backgroundColor: '#1a0102',
+                    border: '1px solid #ff3300',
+                    color: '#ff3300',
+                    fontFamily: 'Fira Mono, monospace',
+                    fontSize: '12px',
+                  }}
+                >
+                  <option value="all">All Tools</option>
+                  {Object.keys(toolNames).map(toolId => (
+                    <option key={toolId} value={toolId}>{toolNames[toolId]}</option>
+                  ))}
+                </select>
+              </div>
 
           <div style={{
             display: 'grid',
@@ -285,6 +343,96 @@ function AccountHunterTool() {
               )}
             </pre>
           </div>
+            </>
+          )}
+
+          {activeTab === 'report' && (
+            <div style={{
+              border: '1px solid #ff3300',
+              backgroundColor: '#0a0000',
+              padding: '20px',
+            }}>
+              {report ? (
+                <div>
+                  <h3 style={{ color: '#ff3300', marginTop: 0, fontSize: '16px' }}>
+                    SUMMARY
+                  </h3>
+                  <div style={{ color: '#ff3300', fontSize: '12px', marginBottom: '20px' }}>
+                    <div>Total Profiles Found: <strong>{report.summary.total_profiles_found}</strong></div>
+                    <div>Unique Sites: <strong>{report.summary.unique_sites}</strong></div>
+                    <div>Tools Run: {report.summary.tools_run}</div>
+                    <div>Tools with Results: {report.summary.tools_with_results}</div>
+                  </div>
+
+                  <h3 style={{ color: '#ff3300', fontSize: '16px' }}>
+                    RESULTS BY TOOL
+                  </h3>
+                  <div style={{ color: '#ff3300', fontSize: '12px', marginBottom: '20px' }}>
+                    {report.by_tool.map((toolResult, idx) => (
+                      <div key={idx} style={{ marginBottom: '5px' }}>
+                        [{toolResult.tool}] Found: <strong>{toolResult.found}</strong>
+                      </div>
+                    ))}
+                  </div>
+
+                  {report.all_profiles && report.all_profiles.length > 0 ? (
+                    <>
+                      <h3 style={{ color: '#ff3300', fontSize: '16px' }}>
+                        FOUND PROFILES ({report.all_profiles.length})
+                      </h3>
+                      <div style={{ maxHeight: '400px', overflow: 'auto' }}>
+                        {Object.entries(report.by_site).map(([site, profiles]) => (
+                          <div key={site} style={{ marginBottom: '20px' }}>
+                            <div style={{
+                              color: '#3399ff',
+                              fontSize: '13px',
+                              fontWeight: 'bold',
+                              marginBottom: '10px',
+                            }}>
+                              [{site}]
+                            </div>
+                            {profiles.map((profile, idx) => (
+                              <div key={idx} style={{
+                                marginBottom: '10px',
+                                paddingLeft: '20px',
+                                fontSize: '11px',
+                              }}>
+                                <a
+                                  href={profile.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  style={{ color: '#ff3300', textDecoration: 'underline' }}
+                                >
+                                  {profile.url}
+                                </a>
+                                {profile.metadata && Object.keys(profile.metadata).length > 0 && (
+                                  <div style={{ marginTop: '5px', paddingLeft: '20px', color: '#999' }}>
+                                    {Object.entries(profile.metadata).map(([key, value]) => (
+                                      <div key={key}>
+                                        {key}: {value}
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  ) : (
+                    <div style={{ color: '#ff3300', fontSize: '12px' }}>
+                      No profiles found.
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div style={{ color: '#ff3300', fontSize: '12px' }}>
+                  Loading report...
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>

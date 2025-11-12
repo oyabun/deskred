@@ -14,6 +14,7 @@ import logging
 # Add parent directory to path to import docker_helper
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from docker_helper import docker_helper, running_containers
+from utils.report_parser import ReportParser
 
 logger = logging.getLogger(__name__)
 
@@ -239,6 +240,62 @@ async def list_aggregations():
             for agg_id, agg_data in running_aggregations.items()
         ]
     }
+
+
+@router.get("/report/{aggregation_id}")
+async def get_aggregation_report(aggregation_id: str, format: str = "json"):
+    """
+    Generate a parsed report from aggregation results
+    Filters out noise and presents only relevant findings
+
+    Args:
+        aggregation_id: The aggregation ID
+        format: Output format - "json" (default) or "text"
+    """
+    if aggregation_id not in running_aggregations:
+        raise HTTPException(status_code=404, detail="Aggregation not found")
+
+    aggregation = running_aggregations[aggregation_id]
+
+    # Get all tool logs
+    all_logs = {}
+    for tool_id, tool_data in aggregation["tools"].items():
+        if "container_id" in tool_data:
+            try:
+                logs_result = docker_helper.get_container_logs(tool_data["container_id"])
+                all_logs[tool_id] = {
+                    "name": tool_data["name"],
+                    "status": logs_result.get("container_status", "unknown"),
+                    "logs": logs_result.get("logs", "")
+                }
+            except Exception as e:
+                all_logs[tool_id] = {
+                    "name": tool_data["name"],
+                    "status": "error",
+                    "error": str(e),
+                    "logs": ""
+                }
+
+    # Generate report
+    report = ReportParser.generate_report(all_logs)
+
+    if format == "text":
+        text_report = ReportParser.format_report_text(report, aggregation["username"])
+        return {
+            "status": "success",
+            "aggregation_id": aggregation_id,
+            "username": aggregation["username"],
+            "format": "text",
+            "report": text_report
+        }
+    else:
+        return {
+            "status": "success",
+            "aggregation_id": aggregation_id,
+            "username": aggregation["username"],
+            "format": "json",
+            "report": report
+        }
 
 
 @router.delete("/cleanup/{aggregation_id}")
