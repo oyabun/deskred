@@ -12,7 +12,7 @@ router = APIRouter()
 
 class HarvesterRequest(BaseModel):
     domain: str
-    source: Optional[str] = "all"  # google, bing, baidu, duckduckgo, etc.
+    source: Optional[str] = "crtsh"  # Default to crtsh (certificate transparency logs)
     limit: Optional[int] = 500  # Límite de resultados
 
 @router.post("/search")
