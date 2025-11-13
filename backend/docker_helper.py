@@ -24,7 +24,10 @@ class DockerHelper:
         image: str,
         command: list,
         timeout: int = 120,
-        auto_remove: bool = True
+        auto_remove: bool = True,
+        volumes: Optional[Dict] = None,
+        tty: bool = False,
+        stdin_open: bool = False
     ) -> Dict[str, str]:
         """
         Ejecuta un contenedor Docker en modo detached y retorna el container_id
@@ -35,6 +38,9 @@ class DockerHelper:
             command: Comando a ejecutar como lista
             timeout: Timeout en segundos
             auto_remove: Si True, el contenedor se elimina automáticamente al finalizar
+            volumes: Dict de volúmenes adicionales a montar (opcional)
+            tty: Allocate a pseudo-TTY
+            stdin_open: Keep STDIN open
 
         Returns:
             Dict con status, container_id y message
@@ -50,6 +56,18 @@ class DockerHelper:
             # Generate unique container name
             container_name = f"{image}-{uuid.uuid4().hex[:8]}"
 
+            # Build volumes dict - start with default results volume
+            container_volumes = {
+                f"{image.replace('deskred-', '')}_results": {
+                    'bind': '/results',
+                    'mode': 'rw'
+                }
+            }
+
+            # Add additional volumes if provided
+            if volumes:
+                container_volumes.update(volumes)
+
             # Ejecutar contenedor en detached mode
             container = self.client.containers.run(
                 image=image,
@@ -60,12 +78,9 @@ class DockerHelper:
                 stderr=True,
                 remove=auto_remove,  # Auto-remove when done (configurable)
                 network="osint-network",
-                volumes={
-                    f"{image.replace('deskred-', '')}_results": {
-                        'bind': '/results',
-                        'mode': 'rw'
-                    }
-                }
+                volumes=container_volumes,
+                tty=tty,
+                stdin_open=stdin_open
             )
 
             # Store container info
