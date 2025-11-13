@@ -50,7 +50,7 @@ function SherlockTool() {
   const toolContent = (
     <div style={{ fontFamily: 'Fira Mono, monospace', fontSize: '12px' }}>
       <div style={{ marginBottom: '15px' }}>
-        <label style={{ display: 'block', marginBottom: '5px', color: '#ff3300' }}>
+        <label style={{ display: 'block', marginBottom: '5px', color: 'var(--theme-primary, #ff3300)' }}>
           Username:
         </label>
         <input
@@ -63,9 +63,9 @@ function SherlockTool() {
           style={{
             width: '100%',
             padding: '8px',
-            backgroundColor: '#1a0102',
-            border: '1px solid #ff3300',
-            color: '#ff3300',
+            backgroundColor: 'var(--theme-bg, #0a0000)',
+            border: '1px solid var(--theme-primary, #ff3300)',
+            color: 'var(--theme-primary, #ff3300)',
             fontFamily: 'Fira Mono, monospace',
             fontSize: '12px',
           }}
@@ -78,7 +78,7 @@ function SherlockTool() {
         style={{
           padding: '8px 16px',
           backgroundColor: '#ff3300',
-          color: '#160909',
+          color: 'var(--theme-bg, #0a0000)',
           border: 'none',
           cursor: loading ? 'not-allowed' : 'pointer',
           fontFamily: 'Fira Mono, monospace',
@@ -96,7 +96,7 @@ function SherlockTool() {
           padding: '10px',
           backgroundColor: 'rgba(255, 0, 0, 0.2)',
           border: '1px solid #ff0000',
-          color: '#ff3300',
+          color: 'var(--theme-primary, #ff3300)',
         }}>
           {error}
         </div>

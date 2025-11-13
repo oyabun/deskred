@@ -151,7 +151,7 @@ function TabContainer({ toolContent, containerId, containerStatus }) {
           border: '1px solid #ff3300',
           marginBottom: '15px'
         }}>
-          <div style={{ color: '#ff3300', fontFamily: 'Fira Mono, monospace', fontSize: '11px' }}>
+          <div style={{ color: 'var(--theme-primary, #ff3300)', fontFamily: 'Fira Mono, monospace', fontSize: '11px' }}>
             <strong>Results Summary:</strong>
             <div style={{ marginTop: '5px' }}>
               • Found: <span style={{ color: '#00ff00' }}>{parsed.stats.found}</span>
@@ -174,7 +174,7 @@ function TabContainer({ toolContent, containerId, containerStatus }) {
 
         {parsed.results.length > 0 && (
           <div>
-            <strong style={{ color: '#ff3300', fontFamily: 'Fira Mono, monospace', fontSize: '12px' }}>
+            <strong style={{ color: 'var(--theme-primary, #ff3300)', fontFamily: 'Fira Mono, monospace', fontSize: '12px' }}>
               URLs Found ({parsed.results.length}):
             </strong>
             <div style={{ marginTop: '10px', maxHeight: '200px', overflow: 'auto' }}>
@@ -232,7 +232,7 @@ function TabContainer({ toolContent, containerId, containerStatus }) {
         {activeTab === 'logs' && (
           <div className="logs-container">
             {logs.length === 0 ? (
-              <div style={{ color: '#ff3300', opacity: 0.6 }}>
+              <div style={{ color: 'var(--theme-primary, #ff3300)', opacity: 0.6 }}>
                 {containerId ? 'Waiting for container output...' : 'No output yet. Run a search to see container execution logs...'}
               </div>
             ) : (

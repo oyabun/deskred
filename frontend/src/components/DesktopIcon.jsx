@@ -14,7 +14,7 @@ function DesktopIcon({ icon, label, onDoubleClick }) {
   return (
     <div className="desktop-icon" onDoubleClick={handleDoubleClick}>
       <div className="icon-image">
-        <IconComponent size={32} strokeWidth={1.5} color="#ff3300" />
+        <IconComponent size={32} strokeWidth={1.5} color="currentColor" />
       </div>
       <div className="icon-label">
         {label}

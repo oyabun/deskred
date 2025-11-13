@@ -212,7 +212,7 @@ function AccountHunterTool() {
         <label style={{
           display: 'block',
           marginBottom: '8px',
-          color: '#ff3300',
+          color: 'var(--theme-primary, #ff3300)',
           fontFamily: 'Fira Mono, monospace',
           fontSize: '14px',
         }}>
@@ -229,9 +229,9 @@ function AccountHunterTool() {
             style={{
               flex: 1,
               padding: '10px',
-              backgroundColor: '#1a0102',
-              border: '1px solid #ff3300',
-              color: '#ff3300',
+              backgroundColor: 'var(--theme-bg, #0a0000)',
+              border: '1px solid var(--theme-primary, #ff3300)',
+              color: 'var(--theme-primary, #ff3300)',
               fontFamily: 'Fira Mono, monospace',
               fontSize: '14px',
             }}
@@ -243,7 +243,7 @@ function AccountHunterTool() {
               padding: '10px 20px',
               backgroundColor: isRunning ? '#666' : '#ff3300',
               border: 'none',
-              color: '#160909',
+              color: 'var(--theme-bg, #0a0000)',
               fontFamily: 'Fira Mono, monospace',
               fontSize: '14px',
               fontWeight: 'bold',
@@ -259,14 +259,14 @@ function AccountHunterTool() {
         <div>
           <div style={{
             padding: '15px',
-            backgroundColor: 'rgba(255, 51, 0, 0.1)',
-            border: '1px solid #ff3300',
+            backgroundColor: 'rgba(var(--theme-primary-rgb, 255, 51, 0), 0.1)',
+            border: '1px solid var(--theme-primary, #ff3300)',
             marginBottom: '20px',
           }}>
-            <h3 style={{ color: '#ff3300', margin: '0 0 10px 0', fontSize: '16px' }}>
+            <h3 style={{ color: 'var(--theme-primary, #ff3300)', margin: '0 0 10px 0', fontSize: '16px' }}>
               Aggregation Status
             </h3>
-            <div style={{ fontSize: '12px', color: '#ff3300' }}>
+            <div style={{ fontSize: '12px', color: 'var(--theme-primary, #ff3300)' }}>
               <div>Username: <strong>{aggregationStatus.aggregation.username}</strong></div>
               <div>Total Tools: {aggregationStatus.summary.total_tools}</div>
               <div style={{ color: '#3399ff' }}>Running: {aggregationStatus.summary.running}</div>
@@ -284,8 +284,8 @@ function AccountHunterTool() {
               style={{
                 padding: '10px 20px',
                 backgroundColor: activeTab === 'status' ? '#ff3300' : 'transparent',
-                border: '1px solid #ff3300',
-                color: activeTab === 'status' ? '#160909' : '#ff3300',
+                border: '1px solid var(--theme-primary, #ff3300)',
+                color: activeTab === 'status' ? 'var(--theme-bg, #0a0000)' : '#ff3300',
                 fontFamily: 'Fira Mono, monospace',
                 fontSize: '14px',
                 fontWeight: 'bold',
@@ -303,8 +303,8 @@ function AccountHunterTool() {
               style={{
                 padding: '10px 20px',
                 backgroundColor: activeTab === 'report' ? '#ff3300' : 'transparent',
-                border: '1px solid #ff3300',
-                color: activeTab === 'report' ? '#160909' : '#ff3300',
+                border: '1px solid var(--theme-primary, #ff3300)',
+                color: activeTab === 'report' ? 'var(--theme-bg, #0a0000)' : '#ff3300',
                 fontFamily: 'Fira Mono, monospace',
                 fontSize: '14px',
                 fontWeight: 'bold',
@@ -323,8 +323,8 @@ function AccountHunterTool() {
               style={{
                 padding: '10px 20px',
                 backgroundColor: activeTab === 'visualize' ? '#ff3300' : 'transparent',
-                border: '1px solid #ff3300',
-                color: activeTab === 'visualize' ? '#160909' : '#ff3300',
+                border: '1px solid var(--theme-primary, #ff3300)',
+                color: activeTab === 'visualize' ? 'var(--theme-bg, #0a0000)' : '#ff3300',
                 fontFamily: 'Fira Mono, monospace',
                 fontSize: '14px',
                 fontWeight: 'bold',
@@ -339,7 +339,7 @@ function AccountHunterTool() {
           {activeTab === 'status' && (
             <>
               <div style={{ marginBottom: '15px' }}>
-                <label style={{ color: '#ff3300', fontSize: '12px', marginRight: '10px' }}>
+                <label style={{ color: 'var(--theme-primary, #ff3300)', fontSize: '12px', marginRight: '10px' }}>
                   View Logs:
                 </label>
                 <select
@@ -347,9 +347,9 @@ function AccountHunterTool() {
                   onChange={(e) => setSelectedTool(e.target.value)}
                   style={{
                     padding: '5px 10px',
-                    backgroundColor: '#1a0102',
-                    border: '1px solid #ff3300',
-                    color: '#ff3300',
+                    backgroundColor: 'var(--theme-bg, #0a0000)',
+                    border: '1px solid var(--theme-primary, #ff3300)',
+                    color: 'var(--theme-primary, #ff3300)',
                     fontFamily: 'Fira Mono, monospace',
                     fontSize: '12px',
                   }}
@@ -400,17 +400,17 @@ function AccountHunterTool() {
           </div>
 
           <div style={{
-            border: '1px solid #ff3300',
-            backgroundColor: '#0a0000',
+            border: '1px solid var(--theme-primary, #ff3300)',
+            backgroundColor: 'var(--theme-bg, #0a0000)',
             padding: '15px',
             maxHeight: '400px',
             overflow: 'auto',
           }}>
-            <h4 style={{ color: '#ff3300', margin: '0 0 10px 0', fontSize: '14px' }}>
+            <h4 style={{ color: 'var(--theme-primary, #ff3300)', margin: '0 0 10px 0', fontSize: '14px' }}>
               {selectedTool === 'all' ? 'All Logs' : `${toolNames[selectedTool]} Logs`}
             </h4>
             <pre style={{
-              color: '#ff3300',
+              color: 'var(--theme-primary, #ff3300)',
               fontFamily: 'Fira Mono, monospace',
               fontSize: '11px',
               margin: 0,
@@ -438,26 +438,26 @@ function AccountHunterTool() {
 
           {activeTab === 'report' && (
             <div style={{
-              border: '1px solid #ff3300',
-              backgroundColor: '#0a0000',
+              border: '1px solid var(--theme-primary, #ff3300)',
+              backgroundColor: 'var(--theme-bg, #0a0000)',
               padding: '20px',
             }}>
               {report ? (
                 <div>
-                  <h3 style={{ color: '#ff3300', marginTop: 0, fontSize: '16px' }}>
+                  <h3 style={{ color: 'var(--theme-primary, #ff3300)', marginTop: 0, fontSize: '16px' }}>
                     OBSCURA REPORT - SUMMARY
                   </h3>
-                  <div style={{ color: '#ff3300', fontSize: '12px', marginBottom: '20px' }}>
+                  <div style={{ color: 'var(--theme-primary, #ff3300)', fontSize: '12px', marginBottom: '20px' }}>
                     <div>Total Profiles Found: <strong>{report.summary.total_profiles_found}</strong></div>
                     <div>Unique Sites: <strong>{report.summary.unique_sites}</strong></div>
                     <div>Tools Run: {report.summary.tools_run}</div>
                     <div>Tools with Results: {report.summary.tools_with_results}</div>
                   </div>
 
-                  <h3 style={{ color: '#ff3300', fontSize: '16px' }}>
+                  <h3 style={{ color: 'var(--theme-primary, #ff3300)', fontSize: '16px' }}>
                     RESULTS BY TOOL
                   </h3>
-                  <div style={{ color: '#ff3300', fontSize: '12px', marginBottom: '20px' }}>
+                  <div style={{ color: 'var(--theme-primary, #ff3300)', fontSize: '12px', marginBottom: '20px' }}>
                     {report.by_tool.map((toolResult, idx) => (
                       <div key={idx} style={{ marginBottom: '5px' }}>
                         [{toolResult.tool}] Found: <strong>{toolResult.found}</strong>
@@ -468,10 +468,10 @@ function AccountHunterTool() {
                   {report.all_profiles && report.all_profiles.length > 0 ? (
                     <>
                       <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <h3 style={{ color: '#ff3300', fontSize: '16px', margin: 0 }}>
+                        <h3 style={{ color: 'var(--theme-primary, #ff3300)', fontSize: '16px', margin: 0 }}>
                           FOUND PROFILES
                         </h3>
-                        <label style={{ color: '#ff3300', fontSize: '12px', marginLeft: '20px' }}>
+                        <label style={{ color: 'var(--theme-primary, #ff3300)', fontSize: '12px', marginLeft: '20px' }}>
                           Filter by Category:
                         </label>
                         <select
@@ -479,9 +479,9 @@ function AccountHunterTool() {
                           onChange={(e) => setSelectedCategory(e.target.value)}
                           style={{
                             padding: '5px 10px',
-                            backgroundColor: '#1a0102',
-                            border: '1px solid #ff3300',
-                            color: '#ff3300',
+                            backgroundColor: 'var(--theme-bg, #0a0000)',
+                            border: '1px solid var(--theme-primary, #ff3300)',
+                            color: 'var(--theme-primary, #ff3300)',
                             fontFamily: 'Fira Mono, monospace',
                             fontSize: '12px',
                           }}
@@ -518,9 +518,9 @@ function AccountHunterTool() {
                               <span style={{
                                 fontSize: '10px',
                                 padding: '2px 6px',
-                                backgroundColor: 'rgba(255, 51, 0, 0.2)',
-                                border: '1px solid #ff3300',
-                                color: '#ff3300',
+                                backgroundColor: 'rgba(var(--theme-primary-rgb, 255, 51, 0), 0.2)',
+                                border: '1px solid var(--theme-primary, #ff3300)',
+                                color: 'var(--theme-primary, #ff3300)',
                                 borderRadius: '3px',
                               }}>
                                 {categorizeSite(site)}
@@ -536,7 +536,7 @@ function AccountHunterTool() {
                                   href={profile.url}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  style={{ color: '#ff3300', textDecoration: 'underline' }}
+                                  style={{ color: 'var(--theme-primary, #ff3300)', textDecoration: 'underline' }}
                                 >
                                   {profile.url}
                                 </a>
@@ -556,13 +556,13 @@ function AccountHunterTool() {
                       </div>
                     </>
                   ) : (
-                    <div style={{ color: '#ff3300', fontSize: '12px' }}>
+                    <div style={{ color: 'var(--theme-primary, #ff3300)', fontSize: '12px' }}>
                       No profiles found.
                     </div>
                   )}
                 </div>
               ) : (
-                <div style={{ color: '#ff3300', fontSize: '12px' }}>
+                <div style={{ color: 'var(--theme-primary, #ff3300)', fontSize: '12px' }}>
                   Loading report...
                 </div>
               )}
@@ -571,17 +571,17 @@ function AccountHunterTool() {
 
           {activeTab === 'visualize' && (
             <div style={{
-              border: '1px solid #ff3300',
-              backgroundColor: '#0a0000',
+              border: '1px solid var(--theme-primary, #ff3300)',
+              backgroundColor: 'var(--theme-bg, #0a0000)',
               padding: '20px',
             }}>
               {vizLoading ? (
-                <div style={{ color: '#ff3300', fontSize: '12px' }}>
+                <div style={{ color: 'var(--theme-primary, #ff3300)', fontSize: '12px' }}>
                   Generating visualizations...
                 </div>
               ) : visualizations ? (
                 <div>
-                  <h3 style={{ color: '#ff3300', marginTop: 0, fontSize: '16px' }}>
+                  <h3 style={{ color: 'var(--theme-primary, #ff3300)', marginTop: 0, fontSize: '16px' }}>
                     NEXUS VISUALIZATIONS
                   </h3>
 
@@ -642,7 +642,7 @@ function AccountHunterTool() {
                   </div>
                 </div>
               ) : (
-                <div style={{ color: '#ff3300', fontSize: '12px' }}>
+                <div style={{ color: 'var(--theme-primary, #ff3300)', fontSize: '12px' }}>
                   No visualizations available.
                 </div>
               )}

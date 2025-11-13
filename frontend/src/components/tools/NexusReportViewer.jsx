@@ -32,7 +32,7 @@ function NexusReportViewer({ aggregationId }) {
 
   if (loading) {
     return (
-      <div style={{ padding: '20px', textAlign: 'center', color: '#ff3300' }}>
+      <div style={{ padding: '20px', textAlign: 'center', color: 'var(--theme-primary, #ff3300)' }}>
         Loading report...
       </div>
     );
@@ -44,7 +44,7 @@ function NexusReportViewer({ aggregationId }) {
         padding: '20px',
         backgroundColor: 'rgba(255, 0, 0, 0.2)',
         border: '1px solid #ff0000',
-        color: '#ff3300'
+        color: 'var(--theme-primary, #ff3300)'
       }}>
         {error}
       </div>
@@ -53,7 +53,7 @@ function NexusReportViewer({ aggregationId }) {
 
   if (!report) {
     return (
-      <div style={{ padding: '20px', color: '#ff3300' }}>
+      <div style={{ padding: '20px', color: 'var(--theme-primary, #ff3300)' }}>
         Report not found
       </div>
     );
@@ -66,7 +66,7 @@ function NexusReportViewer({ aggregationId }) {
       padding: '15px',
       fontFamily: 'Courier New, monospace'
     }}>
-      <h2 style={{ color: '#ff3300', marginBottom: '15px', fontSize: '18px' }}>
+      <h2 style={{ color: 'var(--theme-primary, #ff3300)', marginBottom: '15px', fontSize: '18px' }}>
         OBSCURA REPORT - {report.username}
       </h2>
       <p style={{ fontSize: '12px', marginBottom: '5px' }}>
@@ -108,7 +108,7 @@ function NexusReportViewer({ aggregationId }) {
           {/* Category Breakdown */}
           {report.visualization.category_breakdown && (
             <div style={{ marginBottom: '15px' }}>
-              <h4 style={{ color: '#ff3300', fontSize: '12px', marginBottom: '5px' }}>
+              <h4 style={{ color: 'var(--theme-primary, #ff3300)', fontSize: '12px', marginBottom: '5px' }}>
                 Category Breakdown
               </h4>
               <Plot
@@ -117,9 +117,9 @@ function NexusReportViewer({ aggregationId }) {
                   ...report.visualization.category_breakdown.layout,
                   width: 700,
                   height: 300,
-                  paper_bgcolor: '#0a0000',
-                  plot_bgcolor: '#0a0000',
-                  font: { color: '#ff3300', family: 'Courier New, monospace' }
+                  paper_bgcolor: 'var(--theme-bg, #0a0000)',
+                  plot_bgcolor: 'var(--theme-bg, #0a0000)',
+                  font: { color: 'var(--theme-primary, #ff3300)', family: 'Courier New, monospace' }
                 }}
                 config={{ displayModeBar: false }}
               />
@@ -129,7 +129,7 @@ function NexusReportViewer({ aggregationId }) {
           {/* Platform Distribution */}
           {report.visualization.platform_distribution && (
             <div style={{ marginBottom: '15px' }}>
-              <h4 style={{ color: '#ff3300', fontSize: '12px', marginBottom: '5px' }}>
+              <h4 style={{ color: 'var(--theme-primary, #ff3300)', fontSize: '12px', marginBottom: '5px' }}>
                 Platform Distribution
               </h4>
               <Plot
@@ -138,9 +138,9 @@ function NexusReportViewer({ aggregationId }) {
                   ...report.visualization.platform_distribution.layout,
                   width: 700,
                   height: 400,
-                  paper_bgcolor: '#0a0000',
-                  plot_bgcolor: '#0a0000',
-                  font: { color: '#ff3300', family: 'Courier New, monospace' }
+                  paper_bgcolor: 'var(--theme-bg, #0a0000)',
+                  plot_bgcolor: 'var(--theme-bg, #0a0000)',
+                  font: { color: 'var(--theme-primary, #ff3300)', family: 'Courier New, monospace' }
                 }}
                 config={{ displayModeBar: false }}
               />
@@ -150,7 +150,7 @@ function NexusReportViewer({ aggregationId }) {
           {/* Network Graph */}
           {report.visualization.network_graph && (
             <div style={{ marginBottom: '15px' }}>
-              <h4 style={{ color: '#ff3300', fontSize: '12px', marginBottom: '5px' }}>
+              <h4 style={{ color: 'var(--theme-primary, #ff3300)', fontSize: '12px', marginBottom: '5px' }}>
                 Profile Network
               </h4>
               <Plot
@@ -159,9 +159,9 @@ function NexusReportViewer({ aggregationId }) {
                   ...report.visualization.network_graph.layout,
                   width: 700,
                   height: 500,
-                  paper_bgcolor: '#0a0000',
-                  plot_bgcolor: '#0a0000',
-                  font: { color: '#ff3300', family: 'Courier New, monospace' }
+                  paper_bgcolor: 'var(--theme-bg, #0a0000)',
+                  plot_bgcolor: 'var(--theme-bg, #0a0000)',
+                  font: { color: 'var(--theme-primary, #ff3300)', family: 'Courier New, monospace' }
                 }}
                 config={{ displayModeBar: false }}
               />
@@ -171,7 +171,7 @@ function NexusReportViewer({ aggregationId }) {
           {/* Tool Comparison */}
           {report.visualization.tool_comparison && (
             <div style={{ marginBottom: '15px' }}>
-              <h4 style={{ color: '#ff3300', fontSize: '12px', marginBottom: '5px' }}>
+              <h4 style={{ color: 'var(--theme-primary, #ff3300)', fontSize: '12px', marginBottom: '5px' }}>
                 Tool Comparison
               </h4>
               <Plot
@@ -180,9 +180,9 @@ function NexusReportViewer({ aggregationId }) {
                   ...report.visualization.tool_comparison.layout,
                   width: 700,
                   height: 300,
-                  paper_bgcolor: '#0a0000',
-                  plot_bgcolor: '#0a0000',
-                  font: { color: '#ff3300', family: 'Courier New, monospace' }
+                  paper_bgcolor: 'var(--theme-bg, #0a0000)',
+                  plot_bgcolor: 'var(--theme-bg, #0a0000)',
+                  font: { color: 'var(--theme-primary, #ff3300)', family: 'Courier New, monospace' }
                 }}
                 config={{ displayModeBar: false }}
               />
@@ -207,7 +207,7 @@ function NexusReportViewer({ aggregationId }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  color: '#ff3300',
+                  color: 'var(--theme-primary, #ff3300)',
                   textDecoration: 'none',
                   display: 'block',
                   paddingLeft: '15px',

@@ -111,8 +111,8 @@ function NexusTool({ onOpenReport }) {
   return (
     <div className="tool-container" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <div className="tool-header">
-        <h2 style={{ margin: 0, color: '#ff3300' }}>⬢ NEXUS ⬢</h2>
-        <div style={{ fontSize: '12px', color: '#cc2200' }}>OSINT Report Management System</div>
+        <h2 style={{ margin: 0, color: 'var(--theme-primary, #ff3300)' }}>⬢ NEXUS ⬢</h2>
+        <div style={{ fontSize: '12px', color: 'var(--theme-secondary, #cc2200)' }}>OSINT Report Management System</div>
       </div>
 
       {/* Statistics */}
@@ -120,23 +120,23 @@ function NexusTool({ onOpenReport }) {
         display: 'flex',
         gap: '15px',
         padding: '10px',
-        backgroundColor: 'rgba(255, 51, 0, 0.1)',
-        border: '1px solid #ff3300',
+        backgroundColor: 'rgba(var(--theme-primary-rgb, 255, 51, 0), 0.1)',
+        border: '1px solid var(--theme-primary, #ff3300)',
         marginBottom: '10px'
       }}>
         <div style={{ textAlign: 'center', flex: 1 }}>
           <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#00ff00' }}>{stats.total_reports}</div>
-          <div style={{ fontSize: '10px', color: '#ff3300' }}>Total Reports</div>
+          <div style={{ fontSize: '10px', color: 'var(--theme-primary, #ff3300)' }}>Total Reports</div>
         </div>
         <div style={{ textAlign: 'center', flex: 1 }}>
           <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#00ff00' }}>{stats.total_usernames}</div>
-          <div style={{ fontSize: '10px', color: '#ff3300' }}>Unique Usernames</div>
+          <div style={{ fontSize: '10px', color: 'var(--theme-primary, #ff3300)' }}>Unique Usernames</div>
         </div>
         <div style={{ textAlign: 'center', flex: 1 }}>
           <div style={{ fontSize: '18px', fontWeight: 'bold', color: stats.connected ? '#00ff00' : '#ff0000' }}>
             {stats.connected ? 'Online' : 'Offline'}
           </div>
-          <div style={{ fontSize: '10px', color: '#ff3300' }}>Redis Status</div>
+          <div style={{ fontSize: '10px', color: 'var(--theme-primary, #ff3300)' }}>Redis Status</div>
         </div>
       </div>
 
@@ -151,9 +151,9 @@ function NexusTool({ onOpenReport }) {
           className="tool-input"
           style={{
             flex: 1,
-            backgroundColor: '#0a0000',
-            border: '1px solid #ff3300',
-            color: '#ff3300',
+            backgroundColor: 'var(--theme-bg, #0a0000)',
+            border: '1px solid var(--theme-primary, #ff3300)',
+            color: 'var(--theme-primary, #ff3300)',
             padding: '8px',
             fontFamily: 'Courier New, monospace'
           }}
@@ -163,9 +163,9 @@ function NexusTool({ onOpenReport }) {
           onClick={searchReports}
           title="Search"
           style={{
-            backgroundColor: '#0a0000',
-            border: '1px solid #ff3300',
-            color: '#ff3300',
+            backgroundColor: 'var(--theme-bg, #0a0000)',
+            border: '1px solid var(--theme-primary, #ff3300)',
+            color: 'var(--theme-primary, #ff3300)',
             padding: '8px 12px',
             cursor: 'pointer',
             display: 'flex',
@@ -180,9 +180,9 @@ function NexusTool({ onOpenReport }) {
           onClick={loadReports}
           title="Show All"
           style={{
-            backgroundColor: '#0a0000',
-            border: '1px solid #ff3300',
-            color: '#ff3300',
+            backgroundColor: 'var(--theme-bg, #0a0000)',
+            border: '1px solid var(--theme-primary, #ff3300)',
+            color: 'var(--theme-primary, #ff3300)',
             padding: '8px 12px',
             cursor: 'pointer',
             display: 'flex',
@@ -197,9 +197,9 @@ function NexusTool({ onOpenReport }) {
           onClick={loadData}
           title="Refresh"
           style={{
-            backgroundColor: '#0a0000',
-            border: '1px solid #ff3300',
-            color: '#ff3300',
+            backgroundColor: 'var(--theme-bg, #0a0000)',
+            border: '1px solid var(--theme-primary, #ff3300)',
+            color: 'var(--theme-primary, #ff3300)',
             padding: '8px 12px',
             cursor: 'pointer',
             display: 'flex',
@@ -226,7 +226,7 @@ function NexusTool({ onOpenReport }) {
 
       {/* Loading */}
       {loading && (
-        <div style={{ textAlign: 'center', padding: '20px', color: '#ff3300' }}>
+        <div style={{ textAlign: 'center', padding: '20px', color: 'var(--theme-primary, #ff3300)' }}>
           Loading reports...
         </div>
       )}
@@ -244,41 +244,41 @@ function NexusTool({ onOpenReport }) {
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11px' }}>
             <thead>
               <tr>
-                <th style={{ backgroundColor: 'rgba(255, 51, 0, 0.2)', padding: '8px', border: '1px solid #ff3300', textAlign: 'left' }}>Username</th>
-                <th style={{ backgroundColor: 'rgba(255, 51, 0, 0.2)', padding: '8px', border: '1px solid #ff3300', textAlign: 'left' }}>Created</th>
-                <th style={{ backgroundColor: 'rgba(255, 51, 0, 0.2)', padding: '8px', border: '1px solid #ff3300', textAlign: 'left' }}>Profiles</th>
-                <th style={{ backgroundColor: 'rgba(255, 51, 0, 0.2)', padding: '8px', border: '1px solid #ff3300', textAlign: 'left' }}>Sites</th>
-                <th style={{ backgroundColor: 'rgba(255, 51, 0, 0.2)', padding: '8px', border: '1px solid #ff3300', textAlign: 'left' }}>Report ID</th>
-                <th style={{ backgroundColor: 'rgba(255, 51, 0, 0.2)', padding: '8px', border: '1px solid #ff3300', textAlign: 'left' }}>Actions</th>
+                <th style={{ backgroundColor: 'rgba(var(--theme-primary-rgb, 255, 51, 0), 0.2)', padding: '8px', border: '1px solid var(--theme-primary, #ff3300)', textAlign: 'left' }}>Username</th>
+                <th style={{ backgroundColor: 'rgba(var(--theme-primary-rgb, 255, 51, 0), 0.2)', padding: '8px', border: '1px solid var(--theme-primary, #ff3300)', textAlign: 'left' }}>Created</th>
+                <th style={{ backgroundColor: 'rgba(var(--theme-primary-rgb, 255, 51, 0), 0.2)', padding: '8px', border: '1px solid var(--theme-primary, #ff3300)', textAlign: 'left' }}>Profiles</th>
+                <th style={{ backgroundColor: 'rgba(var(--theme-primary-rgb, 255, 51, 0), 0.2)', padding: '8px', border: '1px solid var(--theme-primary, #ff3300)', textAlign: 'left' }}>Sites</th>
+                <th style={{ backgroundColor: 'rgba(var(--theme-primary-rgb, 255, 51, 0), 0.2)', padding: '8px', border: '1px solid var(--theme-primary, #ff3300)', textAlign: 'left' }}>Report ID</th>
+                <th style={{ backgroundColor: 'rgba(var(--theme-primary-rgb, 255, 51, 0), 0.2)', padding: '8px', border: '1px solid var(--theme-primary, #ff3300)', textAlign: 'left' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {reports.map(report => (
                 <tr key={report.aggregation_id} style={{ borderBottom: '1px solid #ff3300' }}>
-                  <td style={{ padding: '6px 8px', border: '1px solid #ff3300', borderTop: 'none' }}>
+                  <td style={{ padding: '6px 8px', border: '1px solid var(--theme-primary, #ff3300)', borderTop: 'none' }}>
                     <strong>{report.username}</strong>
                   </td>
-                  <td style={{ padding: '6px 8px', border: '1px solid #ff3300', borderTop: 'none' }}>
+                  <td style={{ padding: '6px 8px', border: '1px solid var(--theme-primary, #ff3300)', borderTop: 'none' }}>
                     {new Date(report.created_at).toLocaleString()}
                   </td>
-                  <td style={{ padding: '6px 8px', border: '1px solid #ff3300', borderTop: 'none' }}>
+                  <td style={{ padding: '6px 8px', border: '1px solid var(--theme-primary, #ff3300)', borderTop: 'none' }}>
                     {report.total_profiles}
                   </td>
-                  <td style={{ padding: '6px 8px', border: '1px solid #ff3300', borderTop: 'none' }}>
+                  <td style={{ padding: '6px 8px', border: '1px solid var(--theme-primary, #ff3300)', borderTop: 'none' }}>
                     {report.unique_sites}
                   </td>
-                  <td style={{ padding: '6px 8px', border: '1px solid #ff3300', borderTop: 'none', fontSize: '9px' }}>
+                  <td style={{ padding: '6px 8px', border: '1px solid var(--theme-primary, #ff3300)', borderTop: 'none', fontSize: '9px' }}>
                     <code>{report.aggregation_id}</code>
                   </td>
-                  <td style={{ padding: '6px 8px', border: '1px solid #ff3300', borderTop: 'none' }}>
+                  <td style={{ padding: '6px 8px', border: '1px solid var(--theme-primary, #ff3300)', borderTop: 'none' }}>
                     <div style={{ display: 'flex', gap: '3px', flexWrap: 'wrap' }}>
                       <button
                         onClick={() => onOpenReport(report.aggregation_id, report.username)}
                         title="View Report"
                         style={{
-                          backgroundColor: '#0a0000',
-                          border: '1px solid #ff3300',
-                          color: '#ff3300',
+                          backgroundColor: 'var(--theme-bg, #0a0000)',
+                          border: '1px solid var(--theme-primary, #ff3300)',
+                          color: 'var(--theme-primary, #ff3300)',
                           padding: '4px 8px',
                           cursor: 'pointer',
                           display: 'flex',
@@ -292,9 +292,9 @@ function NexusTool({ onOpenReport }) {
                         onClick={() => exportReport(report.aggregation_id, 'json')}
                         title="Export JSON"
                         style={{
-                          backgroundColor: '#0a0000',
-                          border: '1px solid #ff3300',
-                          color: '#ff3300',
+                          backgroundColor: 'var(--theme-bg, #0a0000)',
+                          border: '1px solid var(--theme-primary, #ff3300)',
+                          color: 'var(--theme-primary, #ff3300)',
                           padding: '4px 8px',
                           cursor: 'pointer',
                           display: 'flex',
@@ -308,9 +308,9 @@ function NexusTool({ onOpenReport }) {
                         onClick={() => exportReport(report.aggregation_id, 'pdf')}
                         title="Export PDF"
                         style={{
-                          backgroundColor: '#0a0000',
-                          border: '1px solid #ff3300',
-                          color: '#ff3300',
+                          backgroundColor: 'var(--theme-bg, #0a0000)',
+                          border: '1px solid var(--theme-primary, #ff3300)',
+                          color: 'var(--theme-primary, #ff3300)',
                           padding: '4px 8px',
                           cursor: 'pointer',
                           display: 'flex',
@@ -324,7 +324,7 @@ function NexusTool({ onOpenReport }) {
                         onClick={() => deleteReport(report.aggregation_id)}
                         title="Delete Report"
                         style={{
-                          backgroundColor: '#0a0000',
+                          backgroundColor: 'var(--theme-bg, #0a0000)',
                           border: '1px solid #ff0000',
                           color: '#ff0000',
                           padding: '4px 8px',
