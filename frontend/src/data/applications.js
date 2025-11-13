@@ -77,4 +77,32 @@ export const applications = [
     description: 'Browse, search, and export cached OSINT reports',
     endpoint: '/api/nexus',
   },
+  {
+    id: 'whatsmyname',
+    name: 'WhatsMyName',
+    icon: 'UserCheck',
+    description: 'Username search across 600+ websites',
+    endpoint: '/api/whatsmyname',
+  },
+  {
+    id: 'blackbird',
+    name: 'Blackbird',
+    icon: 'Bird',
+    description: 'Search 584+ websites with account information',
+    endpoint: '/api/blackbird',
+  },
+  {
+    id: 'telegram-osint',
+    name: 'Telegram OSINT',
+    icon: 'MessageCircle',
+    description: 'Search Telegram usernames, groups, and channels',
+    endpoint: '/api/telegram-osint',
+  },
+  {
+    id: 'ghunt',
+    name: 'GHunt',
+    icon: 'Mail',
+    description: 'Google/Gmail account OSINT investigation',
+    endpoint: '/api/ghunt',
+  },
 ];

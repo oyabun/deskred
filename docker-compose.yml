@@ -201,6 +201,59 @@ services:
     depends_on:
       - backend
 
+  # New OSINT Tools - Expanded Arsenal
+
+  whatsmyname:
+    build:
+      context: ./tools/whatsmyname
+      dockerfile: Dockerfile
+    image: deskred-whatsmyname
+    profiles:
+      - tools
+    networks:
+      - osint-network
+    volumes:
+      - whatsmyname_results:/results
+
+  blackbird:
+    build:
+      context: ./tools/blackbird
+      dockerfile: Dockerfile
+    image: deskred-blackbird
+    profiles:
+      - tools
+    networks:
+      - osint-network
+    volumes:
+      - blackbird_results:/results
+
+  telegram-osint:
+    build:
+      context: ./tools/telegram-osint
+      dockerfile: Dockerfile
+    image: deskred-telegram-osint
+    profiles:
+      - tools
+    networks:
+      - osint-network
+    volumes:
+      - telegram_results:/results
+    environment:
+      - TELEGRAM_API_ID=${TELEGRAM_API_ID:-}
+      - TELEGRAM_API_HASH=${TELEGRAM_API_HASH:-}
+
+  ghunt:
+    build:
+      context: ./tools/ghunt
+      dockerfile: Dockerfile
+    image: deskred-ghunt
+    profiles:
+      - tools
+    networks:
+      - osint-network
+    volumes:
+      - ghunt_results:/results
+
 networks:
   osint-network:
     external: true
@@ -231,3 +284,11 @@ volumes:
     name: gosearch_results
   nexus_results:
     name: nexus_results
+  whatsmyname_results:
+    name: whatsmyname_results
+  blackbird_results:
+    name: blackbird_results
+  telegram_results:
+    name: telegram_results
+  ghunt_results:
+    name: ghunt_results
