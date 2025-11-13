@@ -23,12 +23,13 @@ body {
   height: 100%;
   position: relative;
   background-color: var(--theme-bg, #0a0000);
-  background-image: radial-gradient(circle, var(--theme-primary, #ff3300) 1px, transparent 1px);
-  background-size: 20px 20px;
+  background-image: radial-gradient(circle, rgba(var(--theme-primary-rgb, 255, 51, 0), 0.08) 1px, transparent 1px);
+  background-size: 30px 30px;
   overflow: hidden;
   --theme-primary: #ff3300;
   --theme-bg: #0a0000;
   --theme-secondary: #cc2200;
+  --theme-primary-rgb: 255, 51, 0;
 }
 
 /* Menu Bar */
@@ -293,11 +294,11 @@ body {
 }
 
 .desktop-icon:hover {
-  background-color: rgba(255, 51, 0, 0.1);
+  background-color: rgba(var(--theme-primary-rgb, 255, 51, 0), 0.1);
 }
 
 .desktop-icon:active {
-  background-color: rgba(255, 51, 0, 0.2);
+  background-color: rgba(var(--theme-primary-rgb, 255, 51, 0), 0.2);
 }
 
 .icon-image {
@@ -306,7 +307,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(255, 51, 0, 0.1);
+  background-color: rgba(var(--theme-primary-rgb, 255, 51, 0), 0.1);
   border: 2px solid var(--theme-primary, #ff3300);
   border-radius: 4px;
 }
@@ -335,7 +336,7 @@ body {
 }
 
 .taskbar-window-item {
-  background-color: rgba(255, 51, 0, 0.1);
+  background-color: rgba(var(--theme-primary-rgb, 255, 51, 0), 0.1);
   border: 1px solid var(--theme-primary, #ff3300);
   color: var(--theme-primary, #ff3300);
   padding: 5px 10px;
@@ -349,7 +350,7 @@ body {
 }
 
 .taskbar-window-item:hover {
-  background-color: rgba(255, 51, 0, 0.2);
+  background-color: rgba(var(--theme-primary-rgb, 255, 51, 0), 0.2);
 }
 
 .taskbar-window-item.active {
@@ -388,7 +389,7 @@ body {
 }
 
 .tab-button:hover {
-  background-color: rgba(255, 51, 0, 0.1);
+  background-color: rgba(var(--theme-primary-rgb, 255, 51, 0), 0.1);
 }
 
 .tab-button.active {

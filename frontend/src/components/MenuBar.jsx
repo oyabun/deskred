@@ -62,7 +62,7 @@ function MenuBar({
   return (
     <div className="menu-bar" ref={dropdownRef}>
       <div className="menu-bar-logo">
-        ☰ DESK.RED (赤い机)
+        DESK.RED (赤い机)
       </div>
       <div className="menu-bar-content">
         <div className="menu-items">

@@ -269,10 +269,10 @@ function App() {
 
   // Define theme colors
   const themeColors = {
-    red: { primary: '#ff3300', bg: '#0a0000', secondary: '#cc2200' },
-    orange: { primary: '#ff8800', bg: '#0a0400', secondary: '#cc6600' },
-    green: { primary: '#00ff00', bg: '#000a00', secondary: '#00cc00' },
-    blackwhite: { primary: '#ffffff', bg: '#000000', secondary: '#cccccc' },
+    red: { primary: '#ff3300', bg: '#0a0000', secondary: '#cc2200', rgb: '255, 51, 0' },
+    orange: { primary: '#ff8800', bg: '#0a0400', secondary: '#cc6600', rgb: '255, 136, 0' },
+    green: { primary: '#00ff00', bg: '#000a00', secondary: '#00cc00', rgb: '0, 255, 0' },
+    blackwhite: { primary: '#ffffff', bg: '#000000', secondary: '#cccccc', rgb: '255, 255, 255' },
   };
 
   const currentThemeColors = themeColors[theme] || themeColors.red;
@@ -284,6 +284,7 @@ function App() {
         '--theme-primary': currentThemeColors.primary,
         '--theme-bg': currentThemeColors.bg,
         '--theme-secondary': currentThemeColors.secondary,
+        '--theme-primary-rgb': currentThemeColors.rgb,
       }}
     >
       <MenuBar
