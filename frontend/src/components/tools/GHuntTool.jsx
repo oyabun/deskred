@@ -125,47 +125,88 @@ function GHuntTool() {
     }
   };
 
-  const ApplicationTab = () => (
-    <div className="tool-container">
-      <div className="tool-header">
-        <h2>GHunt - Google Account OSINT</h2>
-        <p>Investigate Google/Gmail accounts for OSINT information</p>
+  const toolContent = (
+    <div style={{ fontFamily: 'Fira Mono, monospace', fontSize: '12px' }}>
+      <div style={{ marginBottom: '15px' }}>
+        <h3 style={{ color: 'var(--theme-primary, #ff3300)', marginBottom: '10px' }}>GHunt - Google Account OSINT</h3>
+        <p style={{ color: 'var(--theme-primary, #ff3300)', opacity: 0.8, fontSize: '11px' }}>
+          Investigate Google/Gmail accounts for OSINT information
+        </p>
       </div>
 
       {checkingAuth ? (
-        <div className="auth-status">
+        <div style={{ padding: '10px', color: 'var(--theme-primary, #ff3300)' }}>
           <p>Checking authentication status...</p>
         </div>
       ) : !isAuthenticated ? (
-        <div className="auth-required">
-          <div className="auth-warning">
-            <h3>⚠️ Authentication Required</h3>
-            <p>GHunt requires Google authentication to function.</p>
-            <p>You need to authenticate once before using this tool.</p>
-            {loginInstructions && (
-              <pre className="instructions">{loginInstructions}</pre>
-            )}
+        <div style={{
+          padding: '15px',
+          backgroundColor: 'rgba(255, 165, 0, 0.1)',
+          border: '1px solid #ffa500',
+          marginBottom: '15px'
+        }}>
+          <h3 style={{ color: '#ffa500', marginBottom: '10px' }}>⚠️ Authentication Required</h3>
+          <p style={{ color: 'var(--theme-primary, #ff3300)', marginBottom: '5px' }}>
+            GHunt requires Google authentication to function.
+          </p>
+          <p style={{ color: 'var(--theme-primary, #ff3300)', marginBottom: '10px' }}>
+            You need to authenticate once before using this tool.
+          </p>
+          {loginInstructions && (
+            <pre style={{
+              fontSize: '10px',
+              padding: '10px',
+              backgroundColor: 'rgba(0,0,0,0.3)',
+              border: '1px solid var(--theme-primary, #ff3300)',
+              overflow: 'auto'
+            }}>
+              {loginInstructions}
+            </pre>
+          )}
+          <div style={{ marginTop: '15px' }}>
+            <button
+              onClick={handleLogin}
+              disabled={isLoading}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: '#ff3300',
+                color: 'var(--theme-bg, #0a0000)',
+                border: 'none',
+                cursor: isLoading ? 'not-allowed' : 'pointer',
+                fontFamily: 'Fira Mono, monospace',
+                fontSize: '12px',
+                fontWeight: 'bold',
+                opacity: isLoading ? 0.6 : 1,
+                marginRight: '10px'
+              }}
+            >
+              {isLoading ? 'Starting Login Process...' : 'Start Login Process'}
+            </button>
+            <button
+              onClick={checkAuthStatus}
+              disabled={isLoading}
+              style={{
+                padding: '8px 16px',
+                backgroundColor: 'transparent',
+                color: 'var(--theme-primary, #ff3300)',
+                border: '1px solid var(--theme-primary, #ff3300)',
+                cursor: isLoading ? 'not-allowed' : 'pointer',
+                fontFamily: 'Fira Mono, monospace',
+                fontSize: '12px',
+                fontWeight: 'bold',
+                opacity: isLoading ? 0.6 : 1
+              }}
+            >
+              Recheck Auth Status
+            </button>
           </div>
-          <button
-            onClick={handleLogin}
-            disabled={isLoading}
-            className="btn-primary"
-          >
-            {isLoading ? 'Starting Login Process...' : 'Start Login Process'}
-          </button>
-          <button
-            onClick={checkAuthStatus}
-            disabled={isLoading}
-            className="btn-secondary"
-            style={{ marginLeft: '10px' }}
-          >
-            Recheck Auth Status
-          </button>
         </div>
       ) : (
-        <div className="tool-form">
-          <div className="form-group">
-            <label>Email Address</label>
+        <div>
+          <div style={{ marginBottom: '15px' }}>
+            <label style={{ display: 'block', marginBottom: '5px', color: 'var(--theme-primary, #ff3300)' }}>
+              Email Address:
+            </label>
             <input
               type="email"
               value={email}
@@ -173,13 +214,31 @@ function GHuntTool() {
               onKeyPress={handleKeyPress}
               placeholder="Enter Gmail/Google email address"
               disabled={isLoading}
-              className="retro-input"
+              style={{
+                width: '100%',
+                padding: '8px',
+                backgroundColor: 'var(--theme-bg, #0a0000)',
+                border: '1px solid var(--theme-primary, #ff3300)',
+                color: 'var(--theme-primary, #ff3300)',
+                fontFamily: 'Fira Mono, monospace',
+                fontSize: '12px',
+              }}
             />
           </div>
           <button
             onClick={handleSearch}
             disabled={isLoading || !email.trim()}
-            className="btn-primary"
+            style={{
+              padding: '8px 16px',
+              backgroundColor: '#ff3300',
+              color: 'var(--theme-bg, #0a0000)',
+              border: 'none',
+              cursor: (isLoading || !email.trim()) ? 'not-allowed' : 'pointer',
+              fontFamily: 'Fira Mono, monospace',
+              fontSize: '12px',
+              fontWeight: 'bold',
+              opacity: (isLoading || !email.trim()) ? 0.6 : 1,
+            }}
           >
             {isLoading ? 'Investigating...' : 'Investigate Google Account'}
           </button>
@@ -187,31 +246,31 @@ function GHuntTool() {
       )}
 
       {logs && (
-        <div className="tool-output">
-          <h3>Status</h3>
-          <pre>{logs}</pre>
+        <div style={{
+          marginTop: '15px',
+          padding: '10px',
+          backgroundColor: 'rgba(255, 51, 0, 0.1)',
+          border: '1px solid #ff3300',
+        }}>
+          <h3 style={{ color: 'var(--theme-primary, #ff3300)', marginBottom: '10px', fontSize: '13px' }}>Status</h3>
+          <pre style={{
+            fontSize: '11px',
+            color: 'var(--theme-primary, #ff3300)',
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word'
+          }}>
+            {logs}
+          </pre>
         </div>
       )}
     </div>
   );
 
-  const ContainerOutputTab = () => (
-    <div className="tool-container">
-      <div className="tool-header">
-        <h3>Live Container Output</h3>
-      </div>
-      <div className="log-output">
-        <pre>{logs || 'No output yet. Run a search to see logs.'}</pre>
-      </div>
-    </div>
-  );
-
   return (
     <TabContainer
-      tabs={[
-        { id: 'app', label: 'Application', content: <ApplicationTab /> },
-        { id: 'output', label: 'Container Output', content: <ContainerOutputTab /> },
-      ]}
+      toolContent={toolContent}
+      containerId={containerId}
+      containerStatus={isLoading ? 'running' : 'exited'}
     />
   );
 }
