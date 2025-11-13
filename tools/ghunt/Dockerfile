@@ -14,6 +14,6 @@ RUN git clone https://github.com/mxrch/GHunt.git . && \
 # Create results directory
 RUN mkdir -p /results
 
-# Set entrypoint
-ENTRYPOINT ["python3", "ghunt.py"]
+# Set entrypoint (GHunt uses main.py)
+ENTRYPOINT ["python3", "main.py"]
 CMD ["--help"]
