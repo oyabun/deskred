@@ -119,7 +119,9 @@ function TabContainer({ toolContent, containerId, containerName, containerStatus
       errors: 0
     };
 
-    logs.forEach(log => {
+    console.log('[TabContainer] Parsing', logs.length, 'log lines');
+
+    logs.forEach((log, idx) => {
       // Count different statuses
       if (log.text.includes('[+]') || log.text.toLowerCase().includes('found')) {
         stats.found++;
@@ -138,11 +140,14 @@ function TabContainer({ toolContent, containerId, containerName, containerStatus
           value: cleanUrl,
           line: log.text
         });
+        console.log('[TabContainer] Found URL:', cleanUrl);
       }
 
-      // Extract Recon-ng structured data (e.g., "Host: example.com", "Ip_Address: 1.2.3.4")
-      const reconFieldMatch = log.text.match(/\[32m\[\*\]\[m\s+([A-Za-z_]+):\s+(.+)$/);
+      // Extract Recon-ng structured data (e.g., "[*] Host: example.com", "[*] Ip_Address: 1.2.3.4")
+      // Note: ANSI codes are already stripped at this point
+      const reconFieldMatch = log.text.match(/\[\*\]\s+([A-Za-z_]+):\s+(.+)$/);
       if (reconFieldMatch) {
+        console.log('[TabContainer] Matched recon field:', reconFieldMatch);
         const [, fieldName, fieldValue] = reconFieldMatch;
         // Skip "None" values
         if (fieldValue.trim() !== 'None') {
@@ -152,10 +157,12 @@ function TabContainer({ toolContent, containerId, containerName, containerStatus
             value: fieldValue.trim(),
             line: log.text
           });
+          console.log('[TabContainer] Added recon field:', fieldName, '=', fieldValue.trim());
         }
       }
     });
 
+    console.log('[TabContainer] Parse complete. Results:', results.length, 'Stats:', stats);
     return { results, stats };
   };
 
