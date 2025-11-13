@@ -16,6 +16,10 @@ function App() {
   const [windows, setWindows] = useState([]);
   const [activeWindowId, setActiveWindowId] = useState(null);
   const [nextZIndex, setNextZIndex] = useState(100);
+  const [theme, setTheme] = useState(() => {
+    // Load theme from localStorage or use default
+    return localStorage.getItem('deskred-theme') || 'red';
+  });
   const [iconOrder, setIconOrder] = useState(() => {
     // Load icon order from localStorage or use default
     const savedOrder = localStorage.getItem('deskred-icon-order');
@@ -111,6 +115,32 @@ function App() {
   const focusWindow = (windowId) => {
     setActiveWindowId(windowId);
     setNextZIndex(nextZIndex + 1);
+  };
+
+  const handleThemeChange = (newTheme) => {
+    setTheme(newTheme);
+    localStorage.setItem('deskred-theme', newTheme);
+  };
+
+  const handleShowDesktop = () => {
+    // Minimize all windows
+    setWindows(windows.map(w => ({ ...w, isMinimized: true })));
+    setActiveWindowId(null);
+  };
+
+  const handleMinimizeAll = () => {
+    // Same as show desktop
+    handleShowDesktop();
+  };
+
+  const handleFocusWindowFromMenu = (windowId) => {
+    // Restore window if minimized and focus it
+    const window = windows.find(w => w.id === windowId);
+    if (window?.isMinimized) {
+      restoreWindow(windowId);
+    } else {
+      focusWindow(windowId);
+    }
   };
 
   const getAppForWindow = (windowId) => {
@@ -237,9 +267,35 @@ function App() {
     }
   };
 
+  // Define theme colors
+  const themeColors = {
+    red: { primary: '#ff3300', bg: '#0a0000', secondary: '#cc2200' },
+    orange: { primary: '#ff8800', bg: '#0a0400', secondary: '#cc6600' },
+    green: { primary: '#00ff00', bg: '#000a00', secondary: '#00cc00' },
+    blackwhite: { primary: '#ffffff', bg: '#000000', secondary: '#cccccc' },
+  };
+
+  const currentThemeColors = themeColors[theme] || themeColors.red;
+
   return (
-    <div className="desktop">
-      <MenuBar />
+    <div
+      className="desktop"
+      style={{
+        '--theme-primary': currentThemeColors.primary,
+        '--theme-bg': currentThemeColors.bg,
+        '--theme-secondary': currentThemeColors.secondary,
+      }}
+    >
+      <MenuBar
+        applications={applications}
+        onOpenApp={openWindow}
+        windows={windows}
+        onFocusWindow={handleFocusWindowFromMenu}
+        onMinimizeAll={handleMinimizeAll}
+        onShowDesktop={handleShowDesktop}
+        currentTheme={theme}
+        onThemeChange={handleThemeChange}
+      />
 
       <div className="desktop-content">
         {/* Desktop Icons */}

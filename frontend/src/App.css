@@ -22,10 +22,13 @@ body {
   width: 100%;
   height: 100%;
   position: relative;
-  background-color: #1a0102;
-  background-image: radial-gradient(circle, rgba(255, 51, 0, 0.3) 1px, transparent 1px);
+  background-color: var(--theme-bg, #0a0000);
+  background-image: radial-gradient(circle, var(--theme-primary, #ff3300) 1px, transparent 1px);
   background-size: 20px 20px;
   overflow: hidden;
+  --theme-primary: #ff3300;
+  --theme-bg: #0a0000;
+  --theme-secondary: #cc2200;
 }
 
 /* Menu Bar */
@@ -35,14 +38,14 @@ body {
   left: 0;
   right: 0;
   display: flex;
-  border-bottom: 1px solid #ff3300;
+  border-bottom: 1px solid var(--theme-primary, #ff3300);
   z-index: 1000;
 }
 
 .menu-bar-logo {
-  background-color: #ff3300;
+  background-color: var(--theme-primary, #ff3300);
   padding: 7px;
-  color: #160909;
+  color: var(--theme-bg, #0a0000);
   font-family: 'Fira Mono', monospace;
   font-weight: 700;
   font-size: 12px;
@@ -51,7 +54,7 @@ body {
 
 .menu-bar-content {
   flex: 1;
-  background-color: #260809;
+  background-color: var(--theme-bg, #0a0000);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -64,26 +67,72 @@ body {
   font-size: 12px;
 }
 
+.menu-item-wrapper {
+  position: relative;
+}
+
 .menu-item {
   font-family: 'Fira Mono', monospace;
-  color: #de001a;
+  color: var(--theme-secondary, #cc2200);
   cursor: pointer;
   transition: color 0.2s;
+  padding: 5px 8px;
 }
 
 .menu-item.active {
-  color: #ff3300;
+  color: var(--theme-primary, #ff3300);
   font-weight: 500;
 }
 
 .menu-item:hover {
-  color: #ff3300;
+  color: var(--theme-primary, #ff3300);
 }
 
 .menu-time {
   font-family: 'Fira Mono', monospace;
-  color: #ff3300;
+  color: var(--theme-primary, #ff3300);
   font-size: 12px;
+}
+
+/* Dropdown Menus */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 5px;
+  background-color: var(--theme-bg, #0a0000);
+  border: 1px solid var(--theme-primary, #ff3300);
+  min-width: 200px;
+  z-index: 10000;
+  font-family: 'Fira Mono', monospace;
+  font-size: 11px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+.dropdown-header {
+  padding: 8px 12px;
+  background-color: rgba(var(--theme-primary-rgb, 255, 51, 0), 0.1);
+  border-bottom: 1px solid var(--theme-primary, #ff3300);
+  color: var(--theme-primary, #ff3300);
+  font-weight: bold;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.dropdown-item {
+  padding: 8px 12px;
+  color: var(--theme-primary, #ff3300);
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-bottom: 1px solid rgba(var(--theme-primary-rgb, 255, 51, 0), 0.1);
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(var(--theme-primary-rgb, 255, 51, 0), 0.2);
 }
 
 /* Desktop Content */
@@ -122,8 +171,8 @@ body {
 }
 
 .window-header {
-  background-color: #ff3300;
-  border: 1px solid #ff3300;
+  background-color: var(--theme-primary, #ff3300);
+  border: 1px solid var(--theme-primary, #ff3300);
   padding: 4px;
   cursor: move;
   display: flex;
@@ -133,8 +182,9 @@ body {
 }
 
 .window-header.inactive {
-  background-color: rgba(255, 0, 4, 0.31);
-  border-color: #930b0d;
+  background-color: var(--theme-secondary, #cc2200);
+  opacity: 0.5;
+  border-color: var(--theme-secondary, #cc2200);
 }
 
 .window-controls {
@@ -179,7 +229,7 @@ body {
 }
 
 .window-content-header {
-  border: 1px solid #ff3300;
+  border: 1px solid var(--theme-primary, #ff3300);
   border-top: none;
   padding: 10px;
   display: flex;
@@ -193,7 +243,7 @@ body {
 
 .window-content-title {
   font-family: 'Fira Mono', monospace;
-  color: #ff3300;
+  color: var(--theme-primary, #ff3300);
   font-size: 12px;
 }
 
@@ -201,10 +251,10 @@ body {
   flex: 1;
   padding: 20px;
   overflow: auto;
-  color: #ff3300;
+  color: var(--theme-primary, #ff3300);
   font-family: 'Fira Mono', monospace;
   font-size: 14px;
-  border: 1px solid #ff3300;
+  border: 1px solid var(--theme-primary, #ff3300);
   border-top: none;
   background-color: #160909;
 }
@@ -257,13 +307,13 @@ body {
   align-items: center;
   justify-content: center;
   background-color: rgba(255, 51, 0, 0.1);
-  border: 2px solid #ff3300;
+  border: 2px solid var(--theme-primary, #ff3300);
   border-radius: 4px;
 }
 
 .icon-label {
   font-family: 'Fira Mono', monospace;
-  color: #ff3300;
+  color: var(--theme-primary, #ff3300);
   font-size: 11px;
   text-align: center;
   word-wrap: break-word;
@@ -286,8 +336,8 @@ body {
 
 .taskbar-window-item {
   background-color: rgba(255, 51, 0, 0.1);
-  border: 1px solid #ff3300;
-  color: #ff3300;
+  border: 1px solid var(--theme-primary, #ff3300);
+  color: var(--theme-primary, #ff3300);
   padding: 5px 10px;
   font-family: 'Fira Mono', monospace;
   font-size: 11px;
@@ -303,7 +353,7 @@ body {
 }
 
 .taskbar-window-item.active {
-  background-color: #ff3300;
+  background-color: var(--theme-primary, #ff3300);
   color: #160909;
 }
 
@@ -330,7 +380,7 @@ body {
   background-color: transparent;
   border: none;
   border-right: 1px solid #ff3300;
-  color: #ff3300;
+  color: var(--theme-primary, #ff3300);
   font-family: 'Fira Mono', monospace;
   font-size: 12px;
   cursor: pointer;
@@ -342,7 +392,7 @@ body {
 }
 
 .tab-button.active {
-  background-color: #ff3300;
+  background-color: var(--theme-primary, #ff3300);
   color: #160909;
   font-weight: bold;
 }
@@ -358,7 +408,7 @@ body {
   font-family: 'Fira Mono', monospace;
   font-size: 11px;
   line-height: 1.4;
-  color: #ff3300;
+  color: var(--theme-primary, #ff3300);
   white-space: pre-wrap;
   word-wrap: break-word;
 }
