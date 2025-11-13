@@ -32,8 +32,10 @@ async def scan_target(request: SimpleScanRequest):
     Simplified scan endpoint for easy integration
     """
     # Use a default command to scan the target
+    # First install the module, then load and run it
+    # Each command must be on a separate line for the resource file
     workspace = "default"
-    command = f"modules load recon/domains-hosts/hackertarget; options set SOURCE {request.target}; run"
+    command = f"marketplace install recon/domains-hosts/hackertarget\nmodules load recon/domains-hosts/hackertarget\noptions set SOURCE {request.target}\nrun"
 
     # Delegate to run_command
     recon_request = ReconNgRequest(workspace=workspace, command=command)
