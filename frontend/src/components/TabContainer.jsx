@@ -139,6 +139,21 @@ function TabContainer({ toolContent, containerId, containerName, containerStatus
           line: log.text
         });
       }
+
+      // Extract Recon-ng structured data (e.g., "Host: example.com", "Ip_Address: 1.2.3.4")
+      const reconFieldMatch = log.text.match(/\[32m\[\*\]\[m\s+([A-Za-z_]+):\s+(.+)$/);
+      if (reconFieldMatch) {
+        const [, fieldName, fieldValue] = reconFieldMatch;
+        // Skip "None" values
+        if (fieldValue.trim() !== 'None') {
+          results.push({
+            type: 'recon-field',
+            field: fieldName,
+            value: fieldValue.trim(),
+            line: log.text
+          });
+        }
+      }
     });
 
     return { results, stats };
@@ -181,30 +196,61 @@ function TabContainer({ toolContent, containerId, containerName, containerStatus
 
         {parsed.results.length > 0 && (
           <div>
-            <strong style={{ color: 'var(--theme-primary, #ff3300)', fontFamily: 'Fira Mono, monospace', fontSize: '12px' }}>
-              URLs Found ({parsed.results.length}):
-            </strong>
-            <div style={{ marginTop: '10px', maxHeight: '200px', overflow: 'auto' }}>
-              {parsed.results.map((result, idx) => (
-                <div key={idx} style={{
-                  padding: '8px',
-                  marginBottom: '5px',
-                  backgroundColor: 'rgba(0, 255, 0, 0.05)',
-                  border: '1px solid rgba(0, 255, 0, 0.3)',
-                  fontFamily: 'Fira Mono, monospace',
-                  fontSize: '11px'
-                }}>
-                  <a
-                    href={result.value}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: '#00ff00', textDecoration: 'none' }}
-                  >
-                    {result.value}
-                  </a>
+            {/* Group results by type */}
+            {parsed.results.filter(r => r.type === 'url').length > 0 && (
+              <div style={{ marginBottom: '15px' }}>
+                <strong style={{ color: 'var(--theme-primary, #ff3300)', fontFamily: 'Fira Mono, monospace', fontSize: '12px' }}>
+                  URLs Found ({parsed.results.filter(r => r.type === 'url').length}):
+                </strong>
+                <div style={{ marginTop: '10px', maxHeight: '200px', overflow: 'auto' }}>
+                  {parsed.results.filter(r => r.type === 'url').map((result, idx) => (
+                    <div key={idx} style={{
+                      padding: '8px',
+                      marginBottom: '5px',
+                      backgroundColor: 'rgba(0, 255, 0, 0.05)',
+                      border: '1px solid rgba(0, 255, 0, 0.3)',
+                      fontFamily: 'Fira Mono, monospace',
+                      fontSize: '11px'
+                    }}>
+                      <a
+                        href={result.value}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: '#00ff00', textDecoration: 'none' }}
+                      >
+                        {result.value}
+                      </a>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
+
+            {/* Display Recon-ng structured data */}
+            {parsed.results.filter(r => r.type === 'recon-field').length > 0 && (
+              <div>
+                <strong style={{ color: 'var(--theme-primary, #ff3300)', fontFamily: 'Fira Mono, monospace', fontSize: '12px' }}>
+                  Reconnaissance Data:
+                </strong>
+                <div style={{ marginTop: '10px', maxHeight: '300px', overflow: 'auto' }}>
+                  {parsed.results.filter(r => r.type === 'recon-field').map((result, idx) => (
+                    <div key={idx} style={{
+                      padding: '8px',
+                      marginBottom: '5px',
+                      backgroundColor: 'rgba(51, 153, 255, 0.05)',
+                      border: '1px solid rgba(51, 153, 255, 0.3)',
+                      fontFamily: 'Fira Mono, monospace',
+                      fontSize: '11px',
+                      display: 'flex',
+                      justifyContent: 'space-between'
+                    }}>
+                      <span style={{ color: '#3399ff', fontWeight: 'bold' }}>{result.field}:</span>
+                      <span style={{ color: '#00ff00' }}>{result.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
