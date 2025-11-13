@@ -23,8 +23,8 @@ body {
   height: 100%;
   position: relative;
   background-color: var(--theme-bg, #0a0000);
-  background-image: radial-gradient(circle, rgba(var(--theme-primary-rgb, 255, 51, 0), 0.15) 1px, transparent 1px);
-  background-size: 20px 20px;
+  background-image: radial-gradient(circle, rgba(var(--theme-primary-rgb, 255, 51, 0), 0.32) 1px, transparent 1px);
+  background-size: 12px 12px;
   overflow: hidden;
   --theme-primary: #ff3300;
   --theme-bg: #0a0000;
