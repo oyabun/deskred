@@ -64,6 +64,18 @@ async def search_username(request: AccountHunterRequest):
             "command": [username]
         },
         {
+            "name": "WhatsMyName",
+            "id": "whatsmyname",
+            "image": "deskred-whatsmyname",
+            "command": ["-u", username]
+        },
+        {
+            "name": "Blackbird",
+            "id": "blackbird",
+            "image": "deskred-blackbird",
+            "command": ["--username", username]
+        },
+        {
             "name": "Social Analyzer",
             "id": "social-analyzer",
             "image": "deskred-social-analyzer",
