@@ -31,7 +31,7 @@ async def search_domain(request: HarvesterRequest):
 
         # Ejecutar TheHarvester en contenedor Docker (async mode)
         result = docker_helper.run_container_async(
-            image="deskred-harvester",
+            image="deskred-theharvester",
             command=command,
             timeout=180  # 3 minutos timeout
         )
@@ -73,8 +73,8 @@ async def check_status():
     """
     Verifica si TheHarvester está disponible (imagen Docker)
     """
-    exists = docker_helper.check_image_exists("deskred-harvester")
+    exists = docker_helper.check_image_exists("deskred-theharvester")
     return {
         "installed": exists,
-        "message": "Imagen Docker disponible" if exists else "Ejecuta: docker-compose build harvester"
+        "message": "Imagen Docker disponible" if exists else "Ejecuta: docker-compose build theharvester"
     }
