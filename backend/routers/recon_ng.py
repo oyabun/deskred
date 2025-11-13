@@ -44,18 +44,23 @@ async def run_command(request: ReconNgRequest):
     """
     Ejecuta un comando en Recon-ng dentro de un workspace
     Modo asíncrono con streaming de logs
+
+    Recon-ng accepts commands via stdin which the wrapper script converts to a resource file
     """
     try:
-        # Construir comando para Recon-ng
-        command = [
-            "-w", request.workspace,
-            "-c", request.command
-        ]
+        # Build command using echo to pipe commands to recon-ng-wrapper
+        # The wrapper script will read from stdin and create a resource file
+
+        # Escape single quotes for shell
+        escaped_command = request.command.replace("'", "'\"'\"'")
+
+        # Use sh to pipe commands via stdin
+        shell_command = f"echo '{escaped_command}' | recon-ng-wrapper -w {request.workspace}"
 
         # Ejecutar Recon-ng en contenedor Docker (async mode)
         result = docker_helper.run_container_async(
             image="deskred-recon-ng",
-            command=command,
+            command=["sh", "-c", shell_command],
             timeout=request.timeout
         )
 
