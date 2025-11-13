@@ -180,6 +180,81 @@ class ReportParser:
             "profiles": results
         }
 
+    @staticmethod
+    def parse_whatsmyname(logs: str) -> Dict:
+        """Extract found profiles from WhatsMyName output"""
+        results = []
+
+        if not logs:
+            return {"tool": "WhatsMyName", "found": 0, "profiles": []}
+
+        # Strip ANSI codes first
+        logs = ReportParser.strip_ansi_codes(logs)
+
+        # WhatsMyName format: + [Site Name] URL
+        pattern = r'\+\s+\[([^\]]+)\]\s+(https?://[^\s]+)'
+        matches = re.finditer(pattern, logs)
+
+        for match in matches:
+            results.append({
+                "site": match.group(1).strip(),
+                "url": match.group(2).strip()
+            })
+
+        return {
+            "tool": "WhatsMyName",
+            "found": len(results),
+            "profiles": results
+        }
+
+    @staticmethod
+    def parse_blackbird(logs: str) -> Dict:
+        """Extract found profiles from Blackbird output"""
+        results = []
+
+        if not logs:
+            return {"tool": "Blackbird", "found": 0, "profiles": []}
+
+        # Strip ANSI codes first
+        logs = ReportParser.strip_ansi_codes(logs)
+
+        # Blackbird format: ✔️  [Site Name] URL
+        # With optional metadata lines: ➡  Key: Value
+        lines = logs.split('\n')
+        current_profile = None
+
+        for line in lines:
+            # Match main profile line
+            profile_match = re.match(r'^\s*[✔️✓]\s+\[([^\]]+)\]\s+(https?://[^\s]+)', line)
+            if profile_match:
+                # Save previous profile if exists
+                if current_profile:
+                    results.append(current_profile)
+
+                # Start new profile
+                current_profile = {
+                    "site": profile_match.group(1).strip(),
+                    "url": profile_match.group(2).strip(),
+                    "metadata": {}
+                }
+            # Match metadata lines
+            elif current_profile:
+                meta_match = re.match(r'^\s*[➡→]\s+([^:]+):\s*(.+)', line)
+                if meta_match:
+                    key = meta_match.group(1).strip()
+                    value = meta_match.group(2).strip()
+                    current_profile["metadata"][key] = value
+
+        # Don't forget the last profile
+        if current_profile:
+            results.append(current_profile)
+
+        return {
+            "tool": "Blackbird",
+            "found": len(results),
+            "profiles": results
+        }
+
     @classmethod
     def generate_report(cls, tool_logs: Dict[str, Dict]) -> Dict:
         """
@@ -197,7 +272,9 @@ class ReportParser:
             "sherlock": cls.parse_sherlock,
             "social-analyzer": cls.parse_social_analyzer,
             "digitalfootprint": cls.parse_digitalfootprint,
-            "gosearch": cls.parse_gosearch
+            "gosearch": cls.parse_gosearch,
+            "whatsmyname": cls.parse_whatsmyname,
+            "blackbird": cls.parse_blackbird
         }
 
         tool_results = []
