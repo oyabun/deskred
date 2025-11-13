@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-function TabContainer({ toolContent, containerId, containerStatus }) {
+function TabContainer({ toolContent, containerId, containerName, containerStatus }) {
   const [activeTab, setActiveTab] = useState('application');
   const [logs, setLogs] = useState([]);
   const [isStreaming, setIsStreaming] = useState(false);
@@ -14,18 +14,21 @@ function TabContainer({ toolContent, containerId, containerStatus }) {
 
       const fetchLogs = async () => {
         try {
-          // Determine endpoint based on container ID (container name pattern)
+          // Determine endpoint based on container name pattern
           // Container names follow pattern: deskred-{toolname}-{uuid}
           let toolName = 'maigret'; // default
 
-          if (containerId.includes('sherlock')) toolName = 'sherlock';
-          else if (containerId.includes('holehe')) toolName = 'holehe';
-          else if (containerId.includes('theharvester')) toolName = 'harvester';
-          else if (containerId.includes('recon-ng')) toolName = 'recon-ng';
-          else if (containerId.includes('social-analyzer')) toolName = 'social-analyzer';
-          else if (containerId.includes('spiderfoot')) toolName = 'spiderfoot';
-          else if (containerId.includes('digitalfootprint')) toolName = 'digitalfootprint';
-          else if (containerId.includes('gosearch')) toolName = 'gosearch';
+          // Parse from containerName if provided, otherwise try containerId (backwards compat)
+          const nameToCheck = containerName || containerId;
+
+          if (nameToCheck.includes('sherlock')) toolName = 'sherlock';
+          else if (nameToCheck.includes('holehe')) toolName = 'holehe';
+          else if (nameToCheck.includes('theharvester')) toolName = 'harvester';
+          else if (nameToCheck.includes('recon-ng')) toolName = 'recon-ng';
+          else if (nameToCheck.includes('social-analyzer')) toolName = 'social-analyzer';
+          else if (nameToCheck.includes('spiderfoot')) toolName = 'spiderfoot';
+          else if (nameToCheck.includes('digitalfootprint')) toolName = 'digitalfootprint';
+          else if (nameToCheck.includes('gosearch')) toolName = 'gosearch';
 
           const endpoint = `http://localhost:8000/api/${toolName}/logs/${containerId}`;
           const response = await fetch(endpoint);

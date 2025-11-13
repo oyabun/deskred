@@ -7,6 +7,7 @@ function HoleheTool() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [containerStatus, setContainerStatus] = useState(null);
+  const [containerName, setContainerName] = useState(null);
 
   const handleCheck = async () => {
     if (!email.trim()) {
@@ -34,6 +35,7 @@ function HoleheTool() {
 
       if (data.status === 'success') {
         setResult(data);
+        setContainerName(data.container_name);
         // Container is now running, status will be updated via log polling
       } else {
         setError(data.message || 'Check failed');
@@ -122,6 +124,7 @@ function HoleheTool() {
     <TabContainer
       toolContent={toolContent}
       containerId={result?.container_id}
+      containerName={containerName}
       containerStatus={containerStatus}
     />
   );
