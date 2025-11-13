@@ -9,8 +9,12 @@ function TabContainer({ toolContent, containerId, containerName, containerStatus
 
   // Stream logs from container
   useEffect(() => {
-    if (containerId && (containerStatus === 'running' || containerStatus === 'created')) {
-      setIsStreaming(true);
+    // Always try to fetch logs at least once if we have a containerId
+    if (containerId) {
+      // Only set streaming state if container is still running
+      if (containerStatus === 'running' || containerStatus === 'created') {
+        setIsStreaming(true);
+      }
 
       const fetchLogs = async () => {
         try {
