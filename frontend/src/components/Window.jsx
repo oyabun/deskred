@@ -137,13 +137,15 @@ function Window({ id, title, subtitle, children, isActive, onClose, onMinimize, 
   return (
     <div
       ref={windowRef}
-      className={`window ${isActive ? 'active focused' : 'inactive'}`}
+      className={`window ${isActive ? 'active focused' : 'inactive'} ${isMaximized ? 'maximized' : ''}`}
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
         width: `${size.width}px`,
         height: `${size.height}px`,
         cursor: isDragging ? 'grabbing' : 'default',
+        maxWidth: isMaximized ? 'none' : undefined,
+        maxHeight: isMaximized ? 'none' : undefined,
       }}
       onMouseDown={() => onFocus(id)}
     >
