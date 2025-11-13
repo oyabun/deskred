@@ -92,13 +92,6 @@ export const applications = [
     endpoint: '/api/blackbird',
   },
   {
-    id: 'telegram-osint',
-    name: 'Telegram OSINT',
-    icon: 'MessageCircle',
-    description: 'Search Telegram usernames, groups, and channels',
-    endpoint: '/api/telegram-osint',
-  },
-  {
     id: 'ghunt',
     name: 'GHunt',
     icon: 'Mail',

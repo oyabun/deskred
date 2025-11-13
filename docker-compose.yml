@@ -227,21 +227,6 @@ services:
     volumes:
       - blackbird_results:/results
 
-  telegram-osint:
-    build:
-      context: ./tools/telegram-osint
-      dockerfile: Dockerfile
-    image: deskred-telegram-osint
-    profiles:
-      - tools
-    networks:
-      - osint-network
-    volumes:
-      - telegram_results:/results
-    environment:
-      - TELEGRAM_API_ID=${TELEGRAM_API_ID:-}
-      - TELEGRAM_API_HASH=${TELEGRAM_API_HASH:-}
-
   ghunt:
     build:
       context: ./tools/ghunt
@@ -288,7 +273,5 @@ volumes:
     name: whatsmyname_results
   blackbird_results:
     name: blackbird_results
-  telegram_results:
-    name: telegram_results
   ghunt_results:
     name: ghunt_results
