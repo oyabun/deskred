@@ -26,9 +26,12 @@ function Window({ id, title, subtitle, children, isActive, onClose, onMinimize, 
     } else {
       // Save current state
       setPreviousState({ position: { ...position }, size: { ...size } });
-      // Maximize
-      setPosition({ x: 0, y: 64 }); // Account for menu bar
-      setSize({ width: window.innerWidth, height: window.innerHeight - 64 });
+      // Maximize - account for menu bar (64px top) and taskbar space (80px bottom)
+      setPosition({ x: 0, y: 64 });
+      setSize({
+        width: window.innerWidth,
+        height: window.innerHeight - 64 - 80  // Menu bar + taskbar reserve
+      });
       setIsMaximized(true);
     }
   };
