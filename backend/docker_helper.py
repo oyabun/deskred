@@ -24,7 +24,7 @@ class DockerHelper:
         image: str,
         command: list,
         timeout: int = 120,
-        auto_remove: bool = True,
+        auto_remove: bool = False,
         volumes: Optional[Dict] = None,
         tty: bool = False,
         stdin_open: bool = False
@@ -158,8 +158,15 @@ class DockerHelper:
             status = container.status
 
             # Clean up if container is done
-            if status in ['exited', 'dead'] and container_id in running_containers:
-                del running_containers[container_id]
+            if status in ['exited', 'dead']:
+                # Remove from tracking dict
+                if container_id in running_containers:
+                    del running_containers[container_id]
+                # Remove the actual container
+                try:
+                    container.remove()
+                except Exception as e:
+                    logger.warning(f"Failed to remove container {container_id}: {e}")
 
             return {
                 "status": "success",
