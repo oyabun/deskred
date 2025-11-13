@@ -51,16 +51,14 @@ async def run_command(request: ReconNgRequest):
         # Build command using echo to pipe commands to recon-ng-wrapper
         # The wrapper script will read from stdin and create a resource file
 
-        # Escape single quotes for shell
-        escaped_command = request.command.replace("'", "'\"'\"'")
-
-        # Use sh to pipe commands via stdin
-        shell_command = f"echo '{escaped_command}' | recon-ng-wrapper -w {request.workspace}"
+        # Build command for the wrapper
+        # The wrapper accepts: -w workspace -c "commands"
+        command = ["-w", request.workspace, "-c", request.command]
 
         # Ejecutar Recon-ng en contenedor Docker (async mode)
         result = docker_helper.run_container_async(
             image="deskred-recon-ng",
-            command=["sh", "-c", shell_command],
+            command=command,
             timeout=request.timeout
         )
 
