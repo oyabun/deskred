@@ -8,10 +8,8 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Clone GHunt
-RUN git clone https://github.com/mxrch/GHunt.git .
-
-# Install Python requirements
-RUN pip install --no-cache-dir -r requirements.txt
+RUN git clone https://github.com/mxrch/GHunt.git . && \
+    pip install --no-cache-dir httpx imagehash pillow protobuf==3.20.0
 
 # Create results directory
 RUN mkdir -p /results

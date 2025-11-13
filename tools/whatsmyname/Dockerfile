@@ -8,10 +8,8 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Clone WhatsMyName
-RUN git clone https://github.com/WebBreacher/WhatsMyName.git .
-
-# Install Python requirements
-RUN pip install --no-cache-dir -r requirements.txt
+RUN git clone https://github.com/WebBreacher/WhatsMyName.git . && \
+    pip install --no-cache-dir requests beautifulsoup4 colorama
 
 # Create results directory
 RUN mkdir -p /results

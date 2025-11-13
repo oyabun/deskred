@@ -8,10 +8,8 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Clone Blackbird
-RUN git clone https://github.com/p1ngul1n0/blackbird.git .
-
-# Install Python requirements
-RUN pip install --no-cache-dir -r requirements.txt
+RUN git clone https://github.com/p1ngul1n0/blackbird.git . && \
+    pip install --no-cache-dir requests
 
 # Create results directory
 RUN mkdir -p /results
