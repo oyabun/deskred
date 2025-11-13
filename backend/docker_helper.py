@@ -88,7 +88,8 @@ class DockerHelper:
                 "container": container,
                 "image": image,
                 "started_at": time.time(),
-                "name": container_name
+                "name": container_name,
+                "auto_remove": auto_remove
             }
 
             return {
@@ -157,16 +158,21 @@ class DockerHelper:
             # Get container status
             status = container.status
 
-            # Clean up if container is done
+            # Clean up if container is done AND was marked for auto-removal
             if status in ['exited', 'dead']:
-                # Remove from tracking dict
+                # Only remove container if it was started with auto_remove=True
+                should_remove = False
                 if container_id in running_containers:
+                    should_remove = running_containers[container_id].get("auto_remove", False)
+                    # Always remove from tracking dict
                     del running_containers[container_id]
-                # Remove the actual container
-                try:
-                    container.remove()
-                except Exception as e:
-                    logger.warning(f"Failed to remove container {container_id}: {e}")
+
+                # Remove the actual container only if auto_remove was True
+                if should_remove:
+                    try:
+                        container.remove()
+                    except Exception as e:
+                        logger.warning(f"Failed to remove container {container_id}: {e}")
 
             return {
                 "status": "success",
