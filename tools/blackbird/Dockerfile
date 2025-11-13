@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
 
 # Clone Blackbird
 RUN git clone https://github.com/p1ngul1n0/blackbird.git . && \
-    pip install --no-cache-dir requests rich
+    pip install --no-cache-dir -r requirements.txt
 
 # Create results directory
 RUN mkdir -p /results

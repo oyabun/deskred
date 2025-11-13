@@ -2,18 +2,23 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install dependencies
+# Install dependencies including required system packages for weasyprint
 RUN apt-get update && apt-get install -y \
     git \
+    libpango-1.0-0 \
+    libpangoft2-1.0-0 \
+    libgdk-pixbuf-2.0-0 \
+    libffi-dev \
+    shared-mime-info \
     && rm -rf /var/lib/apt/lists/*
 
-# Clone WhatsMyName
-RUN git clone https://github.com/WebBreacher/WhatsMyName.git . && \
-    pip install --no-cache-dir requests beautifulsoup4 colorama
+# Clone Naminter and install it properly
+RUN git clone https://github.com/3xp0rt/Naminter.git . && \
+    pip install --no-cache-dir .
 
 # Create results directory
 RUN mkdir -p /results
 
-# Set entrypoint
-ENTRYPOINT ["python3", "whatsmyname.py"]
+# Set entrypoint (naminter command is now installed)
+ENTRYPOINT ["naminter"]
 CMD ["--help"]
