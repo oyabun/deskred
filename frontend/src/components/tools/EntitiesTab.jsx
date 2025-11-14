@@ -22,7 +22,7 @@ const ENTITY_CONFIG = {
   },
   domains: {
     icon: Globe,
-    color: '#9933ff',
+    color: '#bb66ff',
     label: 'Domains'
   },
   locations: {

@@ -94,7 +94,7 @@ Primary (Red):   #ff3300  - Main UI, critical actions
 Success (Green): #00ff00  - Entities, positive indicators
 Warning (Orange):#ff9900  - Follow-ups, medium priority
 Info (Blue):     #3399ff  - Links, informational
-Purple:          #9933ff  - Domains
+Purple:          #bb66ff  - Domains (brightened for visibility)
 Cyan:            #00ffff  - Social handles
 Yellow:          #ffff00  - Phones
 Magenta:         #ff66ff  - Events
