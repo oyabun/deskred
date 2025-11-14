@@ -24,7 +24,7 @@ class DockerHelper:
         image: str,
         command: list,
         timeout: int = 120,
-        auto_remove: bool = False,
+        auto_remove: bool = True,
         volumes: Optional[Dict] = None,
         tty: bool = False,
         stdin_open: bool = False

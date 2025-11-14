@@ -110,8 +110,7 @@ async def search_username(request: AccountHunterRequest):
             result = docker_helper.run_container_async(
                 image=tool["image"],
                 command=tool["command"],
-                timeout=120,
-                auto_remove=False  # Keep containers for log retrieval
+                timeout=120
             )
 
             if result["status"] == "success":
