@@ -41,6 +41,7 @@ results/
 *.csv
 results/*.json
 *.html
+!frontend/index.html
 results/*.txt
 
 # Git in subdirectories
