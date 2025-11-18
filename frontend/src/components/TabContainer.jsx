@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-function TabContainer({ toolContent, containerId, containerStatus }) {
+function TabContainer({ toolContent, containerId, containerName, containerStatus }) {
   const [activeTab, setActiveTab] = useState('application');
   const [logs, setLogs] = useState([]);
   const [isStreaming, setIsStreaming] = useState(false);
@@ -9,23 +9,30 @@ function TabContainer({ toolContent, containerId, containerStatus }) {
 
   // Stream logs from container
   useEffect(() => {
-    if (containerId && (containerStatus === 'running' || containerStatus === 'created')) {
-      setIsStreaming(true);
+    // Always try to fetch logs at least once if we have a containerId
+    if (containerId) {
+      // Only set streaming state if container is still running
+      if (containerStatus === 'running' || containerStatus === 'created') {
+        setIsStreaming(true);
+      }
 
       const fetchLogs = async () => {
         try {
-          // Determine endpoint based on container ID (container name pattern)
+          // Determine endpoint based on container name pattern
           // Container names follow pattern: deskred-{toolname}-{uuid}
           let toolName = 'maigret'; // default
 
-          if (containerId.includes('sherlock')) toolName = 'sherlock';
-          else if (containerId.includes('holehe')) toolName = 'holehe';
-          else if (containerId.includes('theharvester')) toolName = 'harvester';
-          else if (containerId.includes('recon-ng')) toolName = 'recon-ng';
-          else if (containerId.includes('social-analyzer')) toolName = 'social-analyzer';
-          else if (containerId.includes('spiderfoot')) toolName = 'spiderfoot';
-          else if (containerId.includes('digitalfootprint')) toolName = 'digitalfootprint';
-          else if (containerId.includes('gosearch')) toolName = 'gosearch';
+          // Parse from containerName if provided, otherwise try containerId (backwards compat)
+          const nameToCheck = containerName || containerId;
+
+          if (nameToCheck.includes('sherlock')) toolName = 'sherlock';
+          else if (nameToCheck.includes('holehe')) toolName = 'holehe';
+          else if (nameToCheck.includes('theharvester')) toolName = 'harvester';
+          else if (nameToCheck.includes('recon-ng')) toolName = 'recon-ng';
+          else if (nameToCheck.includes('social-analyzer')) toolName = 'social-analyzer';
+          else if (nameToCheck.includes('spiderfoot')) toolName = 'spiderfoot';
+          else if (nameToCheck.includes('digitalfootprint')) toolName = 'digitalfootprint';
+          else if (nameToCheck.includes('gosearch')) toolName = 'gosearch';
 
           const endpoint = `http://localhost:8000/api/${toolName}/logs/${containerId}`;
           const response = await fetch(endpoint);
@@ -112,7 +119,9 @@ function TabContainer({ toolContent, containerId, containerStatus }) {
       errors: 0
     };
 
-    logs.forEach(log => {
+    console.log('[TabContainer] Parsing', logs.length, 'log lines');
+
+    logs.forEach((log, idx) => {
       // Count different statuses
       if (log.text.includes('[+]') || log.text.toLowerCase().includes('found')) {
         stats.found++;
@@ -131,9 +140,29 @@ function TabContainer({ toolContent, containerId, containerStatus }) {
           value: cleanUrl,
           line: log.text
         });
+        console.log('[TabContainer] Found URL:', cleanUrl);
+      }
+
+      // Extract Recon-ng structured data (e.g., "[*] Host: example.com", "[*] Ip_Address: 1.2.3.4")
+      // Note: ANSI codes are already stripped at this point
+      const reconFieldMatch = log.text.match(/\[\*\]\s+([A-Za-z_]+):\s+(.+)$/);
+      if (reconFieldMatch) {
+        console.log('[TabContainer] Matched recon field:', reconFieldMatch);
+        const [, fieldName, fieldValue] = reconFieldMatch;
+        // Skip "None" values
+        if (fieldValue.trim() !== 'None') {
+          results.push({
+            type: 'recon-field',
+            field: fieldName,
+            value: fieldValue.trim(),
+            line: log.text
+          });
+          console.log('[TabContainer] Added recon field:', fieldName, '=', fieldValue.trim());
+        }
       }
     });
 
+    console.log('[TabContainer] Parse complete. Results:', results.length, 'Stats:', stats);
     return { results, stats };
   };
 
@@ -174,30 +203,61 @@ function TabContainer({ toolContent, containerId, containerStatus }) {
 
         {parsed.results.length > 0 && (
           <div>
-            <strong style={{ color: 'var(--theme-primary, #ff3300)', fontFamily: 'Fira Mono, monospace', fontSize: '12px' }}>
-              URLs Found ({parsed.results.length}):
-            </strong>
-            <div style={{ marginTop: '10px', maxHeight: '200px', overflow: 'auto' }}>
-              {parsed.results.map((result, idx) => (
-                <div key={idx} style={{
-                  padding: '8px',
-                  marginBottom: '5px',
-                  backgroundColor: 'rgba(0, 255, 0, 0.05)',
-                  border: '1px solid rgba(0, 255, 0, 0.3)',
-                  fontFamily: 'Fira Mono, monospace',
-                  fontSize: '11px'
-                }}>
-                  <a
-                    href={result.value}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ color: '#00ff00', textDecoration: 'none' }}
-                  >
-                    {result.value}
-                  </a>
+            {/* Group results by type */}
+            {parsed.results.filter(r => r.type === 'url').length > 0 && (
+              <div style={{ marginBottom: '15px' }}>
+                <strong style={{ color: 'var(--theme-primary, #ff3300)', fontFamily: 'Fira Mono, monospace', fontSize: '12px' }}>
+                  URLs Found ({parsed.results.filter(r => r.type === 'url').length}):
+                </strong>
+                <div style={{ marginTop: '10px', maxHeight: '200px', overflow: 'auto' }}>
+                  {parsed.results.filter(r => r.type === 'url').map((result, idx) => (
+                    <div key={idx} style={{
+                      padding: '8px',
+                      marginBottom: '5px',
+                      backgroundColor: 'rgba(0, 255, 0, 0.05)',
+                      border: '1px solid rgba(0, 255, 0, 0.3)',
+                      fontFamily: 'Fira Mono, monospace',
+                      fontSize: '11px'
+                    }}>
+                      <a
+                        href={result.value}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: '#00ff00', textDecoration: 'none' }}
+                      >
+                        {result.value}
+                      </a>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
+
+            {/* Display Recon-ng structured data */}
+            {parsed.results.filter(r => r.type === 'recon-field').length > 0 && (
+              <div>
+                <strong style={{ color: 'var(--theme-primary, #ff3300)', fontFamily: 'Fira Mono, monospace', fontSize: '12px' }}>
+                  Reconnaissance Data:
+                </strong>
+                <div style={{ marginTop: '10px', maxHeight: '300px', overflow: 'auto' }}>
+                  {parsed.results.filter(r => r.type === 'recon-field').map((result, idx) => (
+                    <div key={idx} style={{
+                      padding: '8px',
+                      marginBottom: '5px',
+                      backgroundColor: 'rgba(51, 153, 255, 0.05)',
+                      border: '1px solid rgba(51, 153, 255, 0.3)',
+                      fontFamily: 'Fira Mono, monospace',
+                      fontSize: '11px',
+                      display: 'flex',
+                      justifyContent: 'space-between'
+                    }}>
+                      <span style={{ color: '#3399ff', fontWeight: 'bold' }}>{result.field}:</span>
+                      <span style={{ color: '#00ff00' }}>{result.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

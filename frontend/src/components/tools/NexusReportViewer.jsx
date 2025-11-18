@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import Plot from 'react-plotly.js';
+import EntitiesTab from './EntitiesTab';
+import FollowUpsTab from './FollowUpsTab';
+import LinkedReportsTab from './LinkedReportsTab';
 
 const API_URL = 'http://localhost:8000/api/nexus';
 
@@ -7,6 +10,7 @@ function NexusReportViewer({ aggregationId }) {
   const [report, setReport] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [activeTab, setActiveTab] = useState('summary');
 
   useEffect(() => {
     loadReport();
@@ -62,19 +66,99 @@ function NexusReportViewer({ aggregationId }) {
   return (
     <div style={{
       height: '100%',
-      overflowY: 'auto',
-      padding: '15px',
+      display: 'flex',
+      flexDirection: 'column',
       fontFamily: 'Courier New, monospace'
     }}>
-      <h2 style={{ color: 'var(--theme-primary, #ff3300)', marginBottom: '15px', fontSize: '18px' }}>
-        OBSCURA REPORT - {report.username}
-      </h2>
-      <p style={{ fontSize: '12px', marginBottom: '5px' }}>
-        <strong>Report ID:</strong> {report.aggregation_id}
-      </p>
-      <p style={{ fontSize: '12px', marginBottom: '15px' }}>
-        <strong>Generated:</strong> {new Date(report.created_at).toLocaleString()}
-      </p>
+      {/* Tab Navigation */}
+      <div style={{
+        display: 'flex',
+        borderBottom: '2px solid var(--theme-primary, #ff3300)',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        flexShrink: 0
+      }}>
+        <button
+          onClick={() => setActiveTab('summary')}
+          style={{
+            padding: '10px 20px',
+            backgroundColor: activeTab === 'summary' ? 'var(--theme-primary, #ff3300)' : 'transparent',
+            color: activeTab === 'summary' ? '#000' : 'var(--theme-primary, #ff3300)',
+            border: 'none',
+            cursor: 'pointer',
+            fontFamily: 'Courier New, monospace',
+            fontSize: '12px',
+            fontWeight: 'bold',
+            borderRight: '1px solid #333'
+          }}
+        >
+          Summary & Profiles
+        </button>
+        <button
+          onClick={() => setActiveTab('entities')}
+          style={{
+            padding: '10px 20px',
+            backgroundColor: activeTab === 'entities' ? '#00ff00' : 'transparent',
+            color: activeTab === 'entities' ? '#000' : '#00ff00',
+            border: 'none',
+            cursor: 'pointer',
+            fontFamily: 'Courier New, monospace',
+            fontSize: '12px',
+            fontWeight: 'bold',
+            borderRight: '1px solid #333'
+          }}
+        >
+          Entities
+        </button>
+        <button
+          onClick={() => setActiveTab('followups')}
+          style={{
+            padding: '10px 20px',
+            backgroundColor: activeTab === 'followups' ? '#ff9900' : 'transparent',
+            color: activeTab === 'followups' ? '#000' : '#ff9900',
+            border: 'none',
+            cursor: 'pointer',
+            fontFamily: 'Courier New, monospace',
+            fontSize: '12px',
+            fontWeight: 'bold',
+            borderRight: '1px solid #333'
+          }}
+        >
+          Follow-Ups
+        </button>
+        <button
+          onClick={() => setActiveTab('linked')}
+          style={{
+            padding: '10px 20px',
+            backgroundColor: activeTab === 'linked' ? '#3399ff' : 'transparent',
+            color: activeTab === 'linked' ? '#000' : '#3399ff',
+            border: 'none',
+            cursor: 'pointer',
+            fontFamily: 'Courier New, monospace',
+            fontSize: '12px',
+            fontWeight: 'bold'
+          }}
+        >
+          Linked Reports
+        </button>
+      </div>
+
+      {/* Tab Content */}
+      <div style={{ flex: 1, overflow: 'hidden' }}>
+        {activeTab === 'summary' && (
+          <div style={{
+            height: '100%',
+            overflowY: 'auto',
+            padding: '15px'
+          }}>
+            <h2 style={{ color: 'var(--theme-primary, #ff3300)', marginBottom: '15px', fontSize: '18px' }}>
+              OBSCURA REPORT - {report.username}
+            </h2>
+            <p style={{ fontSize: '12px', marginBottom: '5px' }}>
+              <strong>Report ID:</strong> {report.aggregation_id}
+            </p>
+            <p style={{ fontSize: '12px', marginBottom: '15px' }}>
+              <strong>Generated:</strong> {new Date(report.created_at).toLocaleString()}
+            </p>
 
       <h3 style={{ color: '#3399ff', marginTop: '15px', marginBottom: '10px', fontSize: '14px' }}>
         Summary
@@ -219,6 +303,27 @@ function NexusReportViewer({ aggregationId }) {
             ))}
           </div>
         ))}
+      </div>
+          </div>
+        )}
+
+        {activeTab === 'entities' && (
+          <EntitiesTab aggregationId={report.aggregation_id} />
+        )}
+
+        {activeTab === 'followups' && (
+          <FollowUpsTab
+            aggregationId={report.aggregation_id}
+            username={report.username}
+          />
+        )}
+
+        {activeTab === 'linked' && (
+          <LinkedReportsTab
+            aggregationId={report.aggregation_id}
+            username={report.username}
+          />
+        )}
       </div>
     </div>
   );

@@ -269,11 +269,16 @@ body {
   position: absolute;
   top: 50px;
   left: 20px;
+  right: 20px;
   display: grid;
-  grid-template-columns: repeat(2, 100px);
+  grid-template-columns: repeat(auto-fit, minmax(100px, 100px));
   gap: 20px;
   z-index: 2;
   grid-auto-flow: row;
+  max-height: calc(100vh - 70px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 10px;
 }
 
 .desktop-icon {
@@ -320,6 +325,24 @@ body {
   text-align: center;
   word-wrap: break-word;
   max-width: 100px;
+}
+
+/* Custom scrollbar for desktop icons */
+.desktop-icons::-webkit-scrollbar {
+  width: 8px;
+}
+
+.desktop-icons::-webkit-scrollbar-track {
+  background: rgba(var(--theme-primary-rgb, 255, 51, 0), 0.1);
+}
+
+.desktop-icons::-webkit-scrollbar-thumb {
+  background: var(--theme-primary, #ff3300);
+  border-radius: 4px;
+}
+
+.desktop-icons::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-secondary, #cc2200);
 }
 
 /* Minimized window indicator */

@@ -64,6 +64,18 @@ async def search_username(request: AccountHunterRequest):
             "command": [username]
         },
         {
+            "name": "WhatsMyName",
+            "id": "whatsmyname",
+            "image": "deskred-whatsmyname",
+            "command": ["-u", username]
+        },
+        {
+            "name": "Blackbird",
+            "id": "blackbird",
+            "image": "deskred-blackbird",
+            "command": ["--username", username]
+        },
+        {
             "name": "Social Analyzer",
             "id": "social-analyzer",
             "image": "deskred-social-analyzer",
@@ -98,8 +110,7 @@ async def search_username(request: AccountHunterRequest):
             result = docker_helper.run_container_async(
                 image=tool["image"],
                 command=tool["command"],
-                timeout=120,
-                auto_remove=False  # Keep containers for log retrieval
+                timeout=120
             )
 
             if result["status"] == "success":

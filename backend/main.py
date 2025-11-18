@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import maigret, spiderfoot, holehe, harvester, sherlock, recon_ng, social_analyzer, logs, digitalfootprint, gosearch, account_hunter, nexus
+from routers import maigret, spiderfoot, holehe, harvester, sherlock, recon_ng, social_analyzer, logs, digitalfootprint, gosearch, account_hunter, nexus, whatsmyname, blackbird, ghunt, entities
 
 app = FastAPI(
     title="OSINT Dashboard API",
@@ -34,6 +34,10 @@ app.include_router(digitalfootprint.router, prefix="/api/digitalfootprint", tags
 app.include_router(gosearch.router, prefix="/api/gosearch", tags=["GoSearch"])
 app.include_router(account_hunter.router, tags=["AccountHunter"])
 app.include_router(nexus.router, tags=["Nexus"])
+app.include_router(whatsmyname.router, prefix="/api/whatsmyname", tags=["WhatsMyName"])
+app.include_router(blackbird.router, prefix="/api/blackbird", tags=["Blackbird"])
+app.include_router(ghunt.router, prefix="/api/ghunt", tags=["GHunt"])
+app.include_router(entities.router, tags=["Entities"])
 app.include_router(logs.router, prefix="/api/logs", tags=["Logs"])
 
 @app.get("/")
@@ -41,7 +45,7 @@ async def root():
     return {
         "message": "OSINT Dashboard API",
         "version": "1.0.0",
-        "tools": ["maigret", "spiderfoot", "holehe", "harvester", "sherlock", "recon-ng", "social-analyzer", "digitalfootprint", "gosearch", "account-hunter"]
+        "tools": ["maigret", "spiderfoot", "holehe", "harvester", "sherlock", "recon-ng", "social-analyzer", "digitalfootprint", "gosearch", "account-hunter", "whatsmyname", "blackbird", "ghunt"]
     }
 
 @app.get("/health")

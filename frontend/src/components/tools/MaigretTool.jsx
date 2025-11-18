@@ -7,6 +7,7 @@ function MaigretTool() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [containerStatus, setContainerStatus] = useState(null);
+  const [containerName, setContainerName] = useState(null);
 
   const handleSearch = async () => {
     if (!username.trim()) {
@@ -36,6 +37,7 @@ function MaigretTool() {
 
       if (data.status === 'success') {
         setResult(data);
+        setContainerName(data.container_name);
         // Container is now running, status will be updated via log polling
       } else {
         setError(data.message || 'Search failed');
@@ -124,6 +126,7 @@ function MaigretTool() {
     <TabContainer
       toolContent={toolContent}
       containerId={result?.container_id}
+      containerName={containerName}
       containerStatus={containerStatus}
     />
   );

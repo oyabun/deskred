@@ -40,7 +40,9 @@ async def search_target(request: SpiderFootRequest):
     """
     try:
         # Construir comando
-        command = ["python3", "sf.py"]
+        # Note: ENTRYPOINT is already set to "python sf.py" in Dockerfile
+        # So we only need to pass the actual arguments
+        command = []
 
         # Modo scan (no web UI)
         command.extend(["-s", request.target])

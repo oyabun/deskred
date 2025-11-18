@@ -7,6 +7,7 @@ function GenericTool({ toolName, endpoint, inputLabel = 'Target', inputPlacehold
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [containerStatus, setContainerStatus] = useState(null);
+  const [containerName, setContainerName] = useState(null);
 
   const handleExecute = async () => {
     if (!input.trim()) {
@@ -34,6 +35,7 @@ function GenericTool({ toolName, endpoint, inputLabel = 'Target', inputPlacehold
 
       if (data.status === 'success') {
         setResult(data);
+        setContainerName(data.container_name);
         // Container is now running, status will be updated via log polling
       } else {
         setError(data.message || 'Execution failed');
@@ -128,6 +130,7 @@ function GenericTool({ toolName, endpoint, inputLabel = 'Target', inputPlacehold
     <TabContainer
       toolContent={toolContent}
       containerId={result?.container_id}
+      containerName={containerName}
       containerStatus={containerStatus}
     />
   );

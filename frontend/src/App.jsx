@@ -11,6 +11,9 @@ import GenericTool from './components/tools/GenericTool';
 import AccountHunterTool from './components/tools/AccountHunterTool';
 import NexusTool from './components/tools/NexusTool';
 import NexusReportViewer from './components/tools/NexusReportViewer';
+import WhatsMyNameTool from './components/tools/WhatsMyNameTool';
+import BlackbirdTool from './components/tools/BlackbirdTool';
+import GHuntTool from './components/tools/GHuntTool';
 
 function App() {
   const [windows, setWindows] = useState([]);
@@ -262,6 +265,12 @@ function App() {
         }} />;
       case 'nexus-report-viewer':
         return <NexusReportViewer aggregationId={params.aggregationId} />;
+      case 'whatsmyname':
+        return <WhatsMyNameTool />;
+      case 'blackbird':
+        return <BlackbirdTool />;
+      case 'ghunt':
+        return <GHuntTool />;
       default:
         return <div>Tool not configured</div>;
     }

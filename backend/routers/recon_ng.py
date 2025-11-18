@@ -32,8 +32,10 @@ async def scan_target(request: SimpleScanRequest):
     Simplified scan endpoint for easy integration
     """
     # Use a default command to scan the target
+    # First install the module, then load and run it
+    # Each command must be on a separate line for the resource file
     workspace = "default"
-    command = f"modules load recon/domains-hosts/hackertarget; options set SOURCE {request.target}; run"
+    command = f"marketplace install recon/domains-hosts/hackertarget\nmodules load recon/domains-hosts/hackertarget\noptions set SOURCE {request.target}\nrun"
 
     # Delegate to run_command
     recon_request = ReconNgRequest(workspace=workspace, command=command)
@@ -44,13 +46,16 @@ async def run_command(request: ReconNgRequest):
     """
     Ejecuta un comando en Recon-ng dentro de un workspace
     Modo asíncrono con streaming de logs
+
+    Recon-ng accepts commands via stdin which the wrapper script converts to a resource file
     """
     try:
-        # Construir comando para Recon-ng
-        command = [
-            "-w", request.workspace,
-            "-c", request.command
-        ]
+        # Build command using echo to pipe commands to recon-ng-wrapper
+        # The wrapper script will read from stdin and create a resource file
+
+        # Build command for the wrapper
+        # The wrapper accepts: -w workspace -c "commands"
+        command = ["-w", request.workspace, "-c", request.command]
 
         # Ejecutar Recon-ng en contenedor Docker (async mode)
         result = docker_helper.run_container_async(
