@@ -3,9 +3,7 @@
 
 91.98.234.148 {
     # Basic Authentication
-    basicauth {
-        # Username: admin
-        # Password will be set below (run: caddy hash-password to generate)
+    basic_auth {
         cyber $2a$14$PidYKMQ9PPo8fX.aKAhBB.ZXJsYmHpAbP4gXvxmFZIYOkzk0aL7Wa
     }
 
