@@ -1,22 +1,16 @@
 # Caddy configuration for DESKRED with Basic Auth
-# Access via: https://91.98.234.148
+# For now using HTTP only - HTTPS with IP addresses can be problematic
+# Access via: http://91.98.234.148
 
-91.98.234.148 {
-    # Basic Authentication
+:80 {
+    # Basic Authentication - works on HTTP
     basic_auth {
         cyber $2a$14$PidYKMQ9PPo8fX.aKAhBB.ZXJsYmHpAbP4gXvxmFZIYOkzk0aL7Wa
     }
 
     # Proxy to frontend
-    handle /* {
-        reverse_proxy frontend:5173
-    }
+    reverse_proxy /* frontend:5173
 
     # Proxy API requests to backend
-    handle /api/* {
-        reverse_proxy backend:8000
-    }
-
-    # Self-signed certificate (browser will warn, but traffic is encrypted)
-    tls internal
+    reverse_proxy /api/* backend:8000
 }
