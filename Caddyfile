@@ -6,7 +6,7 @@
     basicauth {
         # Username: admin
         # Password will be set below (run: caddy hash-password to generate)
-        admin $2a$14$PLACEHOLDER_REPLACE_WITH_REAL_HASH
+        cyber $2a$14$PidYKMQ9PPo8fX.aKAhBB.ZXJsYmHpAbP4gXvxmFZIYOkzk0aL7Wa
     }
 
     # Proxy to frontend
