@@ -12,6 +12,7 @@ function MenuBar({
 }) {
   const [time, setTime] = useState(new Date());
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -20,6 +21,16 @@ function MenuBar({
     }, 1000);
 
     return () => clearInterval(timer);
+  }, []);
+
+  // Handle window resize for mobile detection
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   // Close dropdown when clicking outside
@@ -66,7 +77,7 @@ function MenuBar({
       </div>
       <div className="menu-bar-content">
         <div className="menu-items">
-          {/* Apps Menu (☰) */}
+          {/* Apps Menu (☰) - On mobile, includes all menu items */}
           <div className="menu-item-wrapper">
             <div
               className={`menu-item ${openDropdown === 'apps' ? 'active' : ''}`}
@@ -86,11 +97,68 @@ function MenuBar({
                     {app.name}
                   </div>
                 ))}
+
+                {/* Mobile-only menu items */}
+                {isMobile && (
+                  <>
+                    <div className="dropdown-divider"></div>
+                    <div className="dropdown-header">Desktop</div>
+                    <div className="dropdown-item" onClick={() => handleMenuClick('apps', onShowDesktop)}>
+                      Show Desktop
+                    </div>
+                    <div className="dropdown-item" onClick={() => handleMenuClick('apps', onMinimizeAll)}>
+                      Minimize All Windows
+                    </div>
+
+                    <div className="dropdown-divider"></div>
+                    <div className="dropdown-header">Settings - Theme</div>
+                    {themes.map(theme => (
+                      <div
+                        key={theme.id}
+                        className="dropdown-item"
+                        onClick={() => handleMenuClick('apps', () => onThemeChange(theme.id))}
+                        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                      >
+                        <span>{theme.name}</span>
+                        {currentTheme === theme.id && <span>✓</span>}
+                      </div>
+                    ))}
+
+                    <div className="dropdown-divider"></div>
+                    <div className="dropdown-header">Windows</div>
+                    {windows.length === 0 ? (
+                      <div className="dropdown-item" style={{ opacity: 0.5, cursor: 'default' }}>
+                        No windows open
+                      </div>
+                    ) : (
+                      windows.map(window => (
+                        <div
+                          key={window.id}
+                          className="dropdown-item"
+                          onClick={() => handleMenuClick('apps', () => onFocusWindow(window.id))}
+                          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                        >
+                          <span>{window.title}</span>
+                          {window.isMinimized && <span style={{ fontSize: '9px' }}>(minimized)</span>}
+                        </div>
+                      ))
+                    )}
+
+                    <div className="dropdown-divider"></div>
+                    <div className="dropdown-header">About</div>
+                    <div className="dropdown-item" style={{ whiteSpace: 'normal', cursor: 'default' }}>
+                      <div style={{ fontSize: '10px', lineHeight: '1.4' }}>
+                        <strong>DESK.RED (赤い机)</strong> - Retro OSINT Desktop
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             )}
           </div>
 
-          {/* Desktop Menu */}
+          {/* Desktop Menu - Hidden on mobile */}
+          {!isMobile && (
           <div className="menu-item-wrapper">
             <div
               className={`menu-item ${openDropdown === 'desktop' ? 'active' : ''}`}
@@ -115,8 +183,10 @@ function MenuBar({
               </div>
             )}
           </div>
+          )}
 
-          {/* Settings Menu */}
+          {/* Settings Menu - Hidden on mobile */}
+          {!isMobile && (
           <div className="menu-item-wrapper">
             <div
               className={`menu-item ${openDropdown === 'settings' ? 'active' : ''}`}
@@ -145,8 +215,10 @@ function MenuBar({
               </div>
             )}
           </div>
+          )}
 
-          {/* Windows Menu */}
+          {/* Windows Menu - Hidden on mobile */}
+          {!isMobile && (
           <div className="menu-item-wrapper">
             <div
               className={`menu-item ${openDropdown === 'windows' ? 'active' : ''}`}
@@ -183,8 +255,10 @@ function MenuBar({
               </div>
             )}
           </div>
+          )}
 
-          {/* Help Menu */}
+          {/* Help Menu - Hidden on mobile */}
+          {!isMobile && (
           <div className="menu-item-wrapper">
             <div
               className={`menu-item ${openDropdown === 'help' ? 'active' : ''}`}
@@ -217,6 +291,7 @@ function MenuBar({
               </div>
             )}
           </div>
+          )}
         </div>
         <div className="menu-time">
           {formatTime(time)}

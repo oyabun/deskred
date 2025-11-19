@@ -136,6 +136,12 @@ body {
   background-color: rgba(var(--theme-primary-rgb, 255, 51, 0), 0.2);
 }
 
+.dropdown-divider {
+  height: 1px;
+  background-color: rgba(var(--theme-primary-rgb, 255, 51, 0), 0.3);
+  margin: 8px 0;
+}
+
 /* Desktop Content */
 .desktop-content {
   position: absolute;
