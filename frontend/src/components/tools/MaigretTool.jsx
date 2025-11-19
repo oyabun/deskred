@@ -22,7 +22,7 @@ function MaigretTool() {
     setContainerStatus('running');
 
     try {
-      const response = await fetch(`${API_URL}/api/maigret/search`, {
+      const response = await fetch(`${API_URL}/maigret/search`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

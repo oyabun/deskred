@@ -22,7 +22,7 @@ function SherlockTool() {
     setContainerStatus('running');
 
     try {
-      const response = await fetch(`${API_URL}/api/sherlock/search`, {
+      const response = await fetch(`${API_URL}/sherlock/search`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

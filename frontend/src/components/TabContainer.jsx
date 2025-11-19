@@ -35,7 +35,7 @@ function TabContainer({ toolContent, containerId, containerName, containerStatus
           else if (nameToCheck.includes('digitalfootprint')) toolName = 'digitalfootprint';
           else if (nameToCheck.includes('gosearch')) toolName = 'gosearch';
 
-          const endpoint = `${API_URL}/api/${toolName}/logs/${containerId}`;
+          const endpoint = `${API_URL}/${toolName}/logs/${containerId}`;
           const response = await fetch(endpoint);
           const data = await response.json();
 

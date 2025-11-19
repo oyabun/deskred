@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { ChevronRight, Search, Mail, Globe, MapPin, Users, AlertCircle } from 'lucide-react';
 import { API_URL } from '../../config';
 
-const ENTITY_API_URL = `${API_URL}/api/entities`;
+const ENTITY_API_URL = `${API_URL}/entities`;
 
 const PRIORITY_CONFIG = {
   HIGH: {

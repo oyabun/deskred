@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { UserCircle2, Building2, Mail, Globe, MapPin, AtSign, Phone, Calendar, Tag } from 'lucide-react';
 import { API_URL } from '../../config';
 
-const ENTITY_API_URL = `${API_URL}/api/entities`;
+const ENTITY_API_URL = `${API_URL}/entities`;
 
 // Entity type configuration with icons and colors
 const ENTITY_CONFIG = {
