@@ -7,8 +7,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: osint-backend
-    ports:
-      - "8000:8000"
+    # Port removed - only accessible through Caddy
     volumes:
       - ./backend:/app
       - /var/run/docker.sock:/var/run/docker.sock
@@ -51,13 +50,12 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: osint-frontend
-    ports:
-      - "5173:5173"
+    # Port removed - only accessible through Caddy
     volumes:
       - ./frontend:/app
       - /app/node_modules
     environment:
-      - VITE_API_URL=http://91.98.234.148:8000
+      - VITE_API_URL=/api
     networks:
       - osint-network
     restart: unless-stopped
