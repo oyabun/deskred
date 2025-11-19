@@ -16,6 +16,8 @@ app.add_middleware(
         "http://localhost:3001",
         "http://localhost:5173",  # Vite dev server
         "http://localhost:5174",
+        "http://91.98.234.148:5173",  # Production frontend
+        "http://91.98.234.148:8000",  # Production backend
     ],
     allow_credentials=True,
     allow_methods=["*"],
