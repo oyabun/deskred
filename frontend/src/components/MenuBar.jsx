@@ -87,21 +87,25 @@ function MenuBar({
             </div>
             {openDropdown === 'apps' && (
               <div className="dropdown-menu">
-                <div className="dropdown-header">Applications</div>
-                {applications.map(app => (
-                  <div
-                    key={app.id}
-                    className="dropdown-item"
-                    onClick={() => handleMenuClick('apps', () => onOpenApp(app.id))}
-                  >
-                    {app.name}
-                  </div>
-                ))}
+                {/* Desktop: Show Applications */}
+                {!isMobile && (
+                  <>
+                    <div className="dropdown-header">Applications</div>
+                    {applications.map(app => (
+                      <div
+                        key={app.id}
+                        className="dropdown-item"
+                        onClick={() => handleMenuClick('apps', () => onOpenApp(app.id))}
+                      >
+                        {app.name}
+                      </div>
+                    ))}
+                  </>
+                )}
 
                 {/* Mobile-only menu items */}
                 {isMobile && (
                   <>
-                    <div className="dropdown-divider"></div>
                     <div className="dropdown-header">Desktop</div>
                     <div className="dropdown-item" onClick={() => handleMenuClick('apps', onShowDesktop)}>
                       Show Desktop
