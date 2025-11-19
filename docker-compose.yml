@@ -31,8 +31,7 @@ services:
   redis:
     image: redis:7-alpine
     container_name: osint-redis
-    ports:
-      - "6379:6379"
+    # Port removed - only accessible within Docker network
     volumes:
       - redis-data:/data
     networks:
