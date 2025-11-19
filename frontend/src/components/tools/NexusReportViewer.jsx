@@ -5,7 +5,7 @@ import FollowUpsTab from './FollowUpsTab';
 import LinkedReportsTab from './LinkedReportsTab';
 import { API_URL as BASE_API_URL } from '../../config';
 
-const API_URL = `${BASE_API_URL}/api/nexus`;
+const API_URL = `${BASE_API_URL}/nexus`;
 
 function NexusReportViewer({ aggregationId }) {
   const [report, setReport] = useState(null);
