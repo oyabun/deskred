@@ -42,6 +42,7 @@ results/
 results/*.json
 *.html
 !frontend/index.html
+!docker/nexus-app/index.html
 results/*.txt
 
 # Git in subdirectories
