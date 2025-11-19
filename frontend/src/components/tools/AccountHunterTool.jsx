@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import Plot from 'react-plotly.js';
+import { API_URL } from '../../config';
 
 function AccountHunterTool() {
   const [username, setUsername] = useState('');
@@ -75,7 +76,7 @@ function AccountHunterTool() {
       // Poll for status updates
       const fetchStatus = async () => {
         try {
-          const response = await fetch(`http://localhost:8000/api/account-hunter/status/${aggregationId}`);
+          const response = await fetch(`${API_URL}/api/account-hunter/status/${aggregationId}`);
           const data = await response.json();
 
           if (data.status === 'success') {
@@ -98,7 +99,7 @@ function AccountHunterTool() {
       // Poll for logs
       const fetchLogs = async () => {
         try {
-          const response = await fetch(`http://localhost:8000/api/account-hunter/logs/${aggregationId}`);
+          const response = await fetch(`${API_URL}/api/account-hunter/logs/${aggregationId}`);
           const data = await response.json();
 
           if (data.status === 'success') {
@@ -133,7 +134,7 @@ function AccountHunterTool() {
     setToolLogs({});
 
     try {
-      const response = await fetch('http://localhost:8000/api/account-hunter/search', {
+      const response = await fetch(`${API_URL}/api/account-hunter/search', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username.trim() }),
@@ -175,7 +176,7 @@ function AccountHunterTool() {
     if (!aggregationId) return;
 
     try {
-      const response = await fetch(`http://localhost:8000/api/account-hunter/report/${aggregationId}`);
+      const response = await fetch(`${API_URL}/api/account-hunter/report/${aggregationId}`);
       const data = await response.json();
 
       if (data.status === 'success') {
@@ -191,7 +192,7 @@ function AccountHunterTool() {
 
     setVizLoading(true);
     try {
-      const response = await fetch(`http://localhost:8000/api/account-hunter/visualize/${aggregationId}`);
+      const response = await fetch(`${API_URL}/api/account-hunter/visualize/${aggregationId}`);
       const data = await response.json();
 
       if (data.status === 'success') {

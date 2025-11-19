@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import TabContainer from '../TabContainer';
+import { API_URL } from '../../config';
 
 function GenericTool({ toolName, endpoint, inputLabel = 'Target', inputPlaceholder = 'Enter target', buttonLabel = 'Execute', paramName = 'target' }) {
   const [input, setInput] = useState('');
@@ -21,7 +22,7 @@ function GenericTool({ toolName, endpoint, inputLabel = 'Target', inputPlacehold
     setContainerStatus('running');
 
     try {
-      const response = await fetch(`http://localhost:8000${endpoint}`, {
+      const response = await fetch(`${API_URL}${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

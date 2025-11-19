@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { API_URL } from '../config';
 
 function TabContainer({ toolContent, containerId, containerName, containerStatus }) {
   const [activeTab, setActiveTab] = useState('application');
@@ -34,7 +35,7 @@ function TabContainer({ toolContent, containerId, containerName, containerStatus
           else if (nameToCheck.includes('digitalfootprint')) toolName = 'digitalfootprint';
           else if (nameToCheck.includes('gosearch')) toolName = 'gosearch';
 
-          const endpoint = `http://localhost:8000/api/${toolName}/logs/${containerId}`;
+          const endpoint = `${API_URL}/api/${toolName}/logs/${containerId}`;
           const response = await fetch(endpoint);
           const data = await response.json();
 

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import TabContainer from '../TabContainer';
+import { API_URL } from '../../config';
 
 function MaigretTool() {
   const [username, setUsername] = useState('');
@@ -21,7 +22,7 @@ function MaigretTool() {
     setContainerStatus('running');
 
     try {
-      const response = await fetch('http://localhost:8000/api/maigret/search', {
+      const response = await fetch(`${API_URL}/api/maigret/search`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

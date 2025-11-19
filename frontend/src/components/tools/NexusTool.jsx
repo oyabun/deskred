@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Search, RotateCw, List, Eye, FileJson, FileText, Trash2 } from 'lucide-react';
+import { API_URL as BASE_API_URL } from '../../config';
 
-const API_URL = 'http://localhost:8000/api/nexus';
+const API_URL = `${BASE_API_URL}/api/nexus`;
 
 function NexusTool({ onOpenReport }) {
   const [reports, setReports] = useState([]);

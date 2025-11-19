@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import TabContainer from '../TabContainer';
+import { API_URL } from '../../config';
 
 function HoleheTool() {
   const [email, setEmail] = useState('');
@@ -21,7 +22,7 @@ function HoleheTool() {
     setContainerStatus('running');
 
     try {
-      const response = await fetch('http://localhost:8000/api/holehe/search', {
+      const response = await fetch(`${API_URL}/api/holehe/search`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

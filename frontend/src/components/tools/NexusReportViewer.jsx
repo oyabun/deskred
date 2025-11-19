@@ -3,8 +3,9 @@ import Plot from 'react-plotly.js';
 import EntitiesTab from './EntitiesTab';
 import FollowUpsTab from './FollowUpsTab';
 import LinkedReportsTab from './LinkedReportsTab';
+import { API_URL as BASE_API_URL } from '../../config';
 
-const API_URL = 'http://localhost:8000/api/nexus';
+const API_URL = `${BASE_API_URL}/api/nexus`;
 
 function NexusReportViewer({ aggregationId }) {
   const [report, setReport] = useState(null);

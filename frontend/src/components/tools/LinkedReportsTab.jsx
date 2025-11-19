@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link2, ChevronRight, Calendar, User, Hash, FileText } from 'lucide-react';
+import { API_URL } from '../../config';
 
-const ENTITY_API_URL = 'http://localhost:8000/api/entities';
+const ENTITY_API_URL = `${API_URL}/api/entities`;
 
 function LinkedReportsTab({ aggregationId, username }) {
   const [linkedReports, setLinkedReports] = useState([]);
