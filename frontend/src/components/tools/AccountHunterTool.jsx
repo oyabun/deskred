@@ -134,7 +134,7 @@ function AccountHunterTool() {
     setToolLogs({});
 
     try {
-      const response = await fetch(`${API_URL}/api/account-hunter/search', {
+      const response = await fetch(`${API_URL}/api/account-hunter/search`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: username.trim() }),
