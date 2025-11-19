@@ -1,0 +1,24 @@
+# Caddy configuration for DESKRED with Basic Auth
+# Access via: https://91.98.234.148
+
+91.98.234.148 {
+    # Basic Authentication
+    basicauth {
+        # Username: admin
+        # Password will be set below (run: caddy hash-password to generate)
+        admin $2a$14$PLACEHOLDER_REPLACE_WITH_REAL_HASH
+    }
+
+    # Proxy to frontend
+    handle /* {
+        reverse_proxy frontend:5173
+    }
+
+    # Proxy API requests to backend
+    handle /api/* {
+        reverse_proxy backend:8000
+    }
+
+    # Self-signed certificate (browser will warn, but traffic is encrypted)
+    tls internal
+}

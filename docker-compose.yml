@@ -57,11 +57,29 @@ services:
       - ./frontend:/app
       - /app/node_modules
     environment:
-      - VITE_API_URL=http://localhost:8000
+      - VITE_API_URL=http://91.98.234.148:8000
     networks:
       - osint-network
     restart: unless-stopped
     depends_on:
+      - backend
+
+  # Caddy - Reverse proxy with HTTPS and Basic Auth
+  caddy:
+    image: caddy:2-alpine
+    container_name: osint-caddy
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy-data:/data
+      - caddy-config:/config
+    networks:
+      - osint-network
+    restart: unless-stopped
+    depends_on:
+      - frontend
       - backend
 
   # OSINT Tool Images - These are built but not run as services
@@ -275,3 +293,7 @@ volumes:
     name: blackbird_results
   ghunt_results:
     name: ghunt_results
+  caddy-data:
+    name: caddy-data
+  caddy-config:
+    name: caddy-config
